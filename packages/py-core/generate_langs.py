@@ -10,9 +10,9 @@ import sys
 # Add the scripts directory to the path
 sys.path.insert(0, os.path.dirname(__file__))
 
-from lang_stats.fetcher import fetch_language_stats
-from lang_stats.generator import generate_language_stats
-from lang_stats.readme_updater import update_readme
+from lang_stats.legacy.fetcher import fetch_language_stats
+from lang_stats.legacy.generator import generate_language_stats
+from lang_stats.legacy.readme_updater import update_readme
 
 
 def main():
