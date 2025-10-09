@@ -48,7 +48,7 @@ svg_light_content = svg_light.replace('<div align="center">\n', '').replace('\n<
 svg_dark_content = svg_dark.replace('<div align="center">\n', '').replace('\n</div>', '')
 
 # Save to workspace root (simulating the actual workflow)
-workspace_root = os.path.join(os.path.dirname(__file__), '..', '..')
+workspace_root = os.path.join(os.path.dirname(__file__), '..', '..', '..')
 light_path = os.path.join(workspace_root, 'langs-mono-light.svg')
 dark_path = os.path.join(workspace_root, 'langs-mono-dark.svg')
 

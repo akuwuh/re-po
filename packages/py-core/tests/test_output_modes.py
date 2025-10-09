@@ -108,7 +108,7 @@ def test_output_modes():
     print("-" * 80)
     
     try:
-        output_dir = os.path.join(os.path.dirname(__file__), 'test_output')
+        output_dir = os.path.join(os.path.dirname(__file__), '..', 'test_output')
         os.makedirs(output_dir, exist_ok=True)
         
         # Save light theme SVG
@@ -161,7 +161,7 @@ def test_output_modes():
         print(f"✓ Saved HTML version: {html_path}")
         
         print()
-        print(f"You can open these files in a browser to see the results:")
+        print("You can open these files in a browser to see the results:")
         print(f"  - file://{light_svg_path}")
         print(f"  - file://{dark_svg_path}")
         print(f"  - file://{html_path}")

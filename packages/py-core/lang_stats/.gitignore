@@ -10,6 +10,7 @@ __pycache__/
 htmlcov/
 .tox/
 *.cover
+../test_output/
 
 # Type checking
 .mypy_cache/

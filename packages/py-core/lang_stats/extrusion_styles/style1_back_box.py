@@ -23,13 +23,34 @@ class BackBoxExtrusion(ExtrusionStyle):
     def render_extrusion(self, x: float, y: float, width: float, height: float,
                         extrude_x: float, extrude_y: float, color: str) -> List[str]:
         """
-        Render the back box.
+        Render the back box extrusion.
         
-        Simply draws another rectangle offset by the extrusion depth,
-        creating the illusion of a box behind the front box.
+        Left side: vertical line with height equal to the Y extrusion offset.
+        Top side: horizontal line with width equal to the X extrusion offset.
+        Bottom side: full bottom edge of the back box.
+        Right side: full right edge of the back box.
         """
-        back_box = f'''<rect x="{x + extrude_x}" y="{y + extrude_y}" width="{width}" height="{height}" 
-            fill="none" stroke="{color}" stroke-width="{self.stroke_width}" 
-            rx="{self.corner_radius}" />'''
-        return [back_box]
+        # Left side of back box: vertical line from bottom of front box to bottom of back box
+        # Height = extrude_y (Y offset between front and back)
+        left_side = f'''<line x1="{x + extrude_x}" y1="{y + height}" 
+            x2="{x + extrude_x}" y2="{y + height + extrude_y}" 
+            stroke="{color}" stroke-width="{self.stroke_width}" />'''
+        
+        # Top side of back box: horizontal line from right of front box to right of back box
+        # Width = extrude_x (X offset between front and back)
+        top_side = f'''<line x1="{x + width}" y1="{y + extrude_y}" 
+            x2="{x + width + extrude_x}" y2="{y + extrude_y}" 
+            stroke="{color}" stroke-width="{self.stroke_width}" />'''
+        
+        # Bottom side of back box: full bottom edge
+        bottom_side = f'''<line x1="{x + extrude_x}" y1="{y + height + extrude_y}" 
+            x2="{x + width + extrude_x}" y2="{y + height + extrude_y}" 
+            stroke="{color}" stroke-width="{self.stroke_width}" />'''
+        
+        # Right side of back box: full right edge
+        right_side = f'''<line x1="{x + width + extrude_x}" y1="{y + extrude_y}" 
+            x2="{x + width + extrude_x}" y2="{y + height + extrude_y}" 
+            stroke="{color}" stroke-width="{self.stroke_width}" />'''
+        
+        return [left_side, top_side, bottom_side, right_side]
 
