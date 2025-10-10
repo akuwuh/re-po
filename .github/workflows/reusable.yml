@@ -1,0 +1,37 @@
+name: re-po reusable
+
+on:
+  workflow_call:
+    inputs:
+      user:
+        required: true
+        type: string
+      format:
+        required: false
+        type: string
+        default: txt
+      theme:
+        required: false
+        type: string
+        default: terminal
+      output:
+        required: false
+        type: string
+        default: re-po.txt
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: akuwuh/re-po/actions/re-po-action@main
+        with:
+          user: ${{ inputs.user }}
+          format: ${{ inputs.format }}
+          theme: ${{ inputs.theme }}
+          out: ${{ inputs.output }}
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.output }}
+          path: ${{ inputs.output }}

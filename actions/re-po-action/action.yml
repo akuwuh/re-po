@@ -1,0 +1,34 @@
+name: "re-po card"
+description: "Render GitHub stats card using the re-po CLI"
+author: "akuwuh"
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+    - name: Install re-po
+      shell: bash
+      run: |
+        python -m pip install --upgrade pip
+        pip install "${{ github.action_path }}/../../packages/py-core"
+    - name: Render card
+      shell: bash
+      run: |
+        re-po render --user "${{ inputs.user }}" --format "${{ inputs.format }}" --theme "${{ inputs.theme }}" --out "${{ inputs.out }}"
+inputs:
+  user:
+    description: "GitHub username"
+    required: true
+  format:
+    description: "Output format (txt or svg)"
+    required: false
+    default: "txt"
+  theme:
+    description: "Theme ID"
+    required: false
+    default: "terminal"
+  out:
+    description: "Output file path"
+    required: false
+    default: "re-po.txt"

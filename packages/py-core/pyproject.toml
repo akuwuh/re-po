@@ -1,50 +1,32 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
+requires = ["setuptools>=64", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "lang-stats"
-version = "3.0.0"
-description = "GitHub language statistics visualizer with 3D box effects"
-readme = "../../README.md"
-requires-python = ">=3.8"
-license = {text = "MIT"}
-keywords = ["github", "statistics", "visualization", "svg"]
-authors = [
-    {name = "Your Name", email = "your.email@example.com"}
-]
-classifiers = [
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 3",
-]
+name = "re-po"
+version = "0.1.0"
+description = "Reusable GitHub stats card renderer"
+readme = "README.md"
+authors = [{name = "akuwuh"}]
+requires-python = ">=3.10"
 dependencies = [
-    "requests>=2.31.0",
+    "httpx>=0.27.0",
+    "pydantic>=2.5",
+    "typer>=0.9",
+    "jinja2>=3.1",
+    "pyyaml>=6.0",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=7.4.0",
-    "pytest-cov>=4.1.0",
-    "black>=23.0.0",
-    "flake8>=6.1.0",
-    "mypy>=1.5.0",
+    "pytest>=7.4",
 ]
 
-[tool.black]
-line-length = 100
-target-version = ['py38', 'py39', 'py310', 'py311']
+[project.scripts]
+"re-po" = "re_po.cli:app"
 
-[tool.mypy]
-python_version = "3.8"
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = false
+[tool.setuptools.packages.find]
+where = ["src"]
 
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-python_files = ["test_*.py"]
-python_classes = ["Test*"]
-python_functions = ["test_*"]
-
+[tool.setuptools.package-data]
+"re_po" = ["default_config.yml"]
