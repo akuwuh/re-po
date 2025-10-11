@@ -1,5 +1,10 @@
 default_theme: terminal
-max_languages: 8
+max_languages: 5
+excluded_languages:
+  - JavaScript
+  - HTML
+  - CSS
+  - SCSS
 themes:
   terminal:
     name: Terminal Dark
@@ -8,21 +13,24 @@ themes:
       border: "#1f2233"
       text: "#e5e9f0"
       filled_bar: "#88c0d0"
+      empty_bar: "#2e3440"
     font_family: "DM Mono, monospace"
     font_size: 14
     progress_bar_blocks: 25
     bar_height: 12
-    box_padding_x: 18
-    box_padding_y: 22
-    line_spacing: 12
-    lang_name_width: 15
-    char_width: 8
-    char_height: 16
-    extrusion_depth_x: 18
-    extrusion_depth_y: 18
-    extrusion_style: "angled"
+    box_padding_x: 20
+    box_padding_y: 18
+    line_spacing: 8
+    lang_name_width: 14
+    char_width: 9.6
+    char_height: 20
+    extrusion_depth_x: 15
+    extrusion_depth_y: 15
+    extrusion_style: "back"
     stroke_width: 2
-    corner_radius: 12
+    corner_radius: 0
+    bar_width_scale: 0.95
+    bar_y_offset: 6
   light:
     name: Terminal Light
     colors:
@@ -30,18 +38,21 @@ themes:
       border: "#cfd6e6"
       text: "#1b1d2b"
       filled_bar: "#5c7cfa"
+      empty_bar: "#d0d7de"
     font_family: "DM Mono, monospace"
     font_size: 14
     progress_bar_blocks: 25
     bar_height: 12
-    box_padding_x: 18
-    box_padding_y: 22
-    line_spacing: 12
-    lang_name_width: 15
-    char_width: 8
-    char_height: 16
-    extrusion_depth_x: 18
-    extrusion_depth_y: 18
-    extrusion_style: "angled"
+    box_padding_x: 20
+    box_padding_y: 18
+    line_spacing: 8
+    lang_name_width: 14
+    char_width: 9.6
+    char_height: 20
+    extrusion_depth_x: 15
+    extrusion_depth_y: 15
+    extrusion_style: "back"
     stroke_width: 2
-    corner_radius: 12
+    corner_radius: 0
+    bar_width_scale: 0.95
+    bar_y_offset: 6

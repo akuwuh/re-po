@@ -46,7 +46,12 @@ def fetch_language_breakdowns(opts: FetchOptions) -> List[RepoLanguageBreakdown]
                 continue
 
             lang_response = client.get(languages_url)
-            lang_response.raise_for_status()
+            try:
+                lang_response.raise_for_status()
+            except httpx.HTTPStatusError as exc:
+                if exc.response.status_code in {403, 404}:
+                    continue
+                raise
             languages: Dict[str, int] = lang_response.json()
 
             if not languages:

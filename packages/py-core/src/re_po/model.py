@@ -23,13 +23,21 @@ class Theme(BaseModel):
     box_padding_y: int = 20
     line_spacing: int = 10
     lang_name_width: int = 15
-    char_width: int = 8
-    char_height: int = 16
+    char_width: float = 8.0
+    char_height: float = 16.0
     extrusion_depth_x: int = 14
     extrusion_depth_y: int = 14
     extrusion_style: str = "angled"
     stroke_width: int = 2
     corner_radius: int = 8
+    ascii_left_padding: int = 2
+    ascii_right_padding: int = 3
+    ascii_indent_level_1: int = 2
+    ascii_indent_level_2: int = 3
+    filled_block: str = "█"
+    empty_block: str = "░"
+    bar_y_offset: int = 6
+    bar_width_scale: float = 0.95
 
 
 class FetchOptions(BaseModel):

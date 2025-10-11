@@ -5,10 +5,10 @@ from __future__ import annotations
 from functools import lru_cache
 from importlib import resources
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 import yaml
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from .model import Theme
 
@@ -19,6 +19,7 @@ class RepoConfig(BaseModel):
     default_theme: str
     themes: Dict[str, Theme]
     max_languages: int = 10
+    excluded_languages: List[str] = Field(default_factory=list)
 
     def get_theme(self, theme_id: Optional[str]) -> Theme:
         key = theme_id or self.default_theme
@@ -64,6 +65,7 @@ def load_config(path: Optional[str] = None) -> RepoConfig:
         default_theme=data.get("default_theme", next(iter(themes)) if themes else "terminal"),
         themes=themes,
         max_languages=data.get("max_languages", 10),
+        excluded_languages=data.get("excluded_languages", []),
     )
 
 
