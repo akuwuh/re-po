@@ -1,0 +1,117 @@
+name: "re-po README cards"
+description: "Generate README cards via re-po features (languages, bio, ...)"
+
+inputs:
+  card:
+    description: "Feature identifier (e.g. languages)"
+    required: true
+  token:
+    description: "GitHub token passed to the feature"
+    required: true
+  actor:
+    description: "Repository owner / GitHub actor (optional)"
+    required: false
+    default: ""
+  username:
+    description: "Override target username (otherwise falls back to actor)"
+    required: false
+    default: ""
+  readme_path:
+    description: "Path to README file to update"
+    required: false
+    default: "README.md"
+  python_version:
+    description: "Python version used by the action"
+    required: false
+    default: "3.x"
+
+  languages_output_mode:
+    description: "languages card output mode (vector or text)"
+    required: false
+    default: "vector"
+  languages_max_languages:
+    description: "Limit of languages to display"
+    required: false
+    default: ""
+  languages_excluded_languages:
+    description: "Comma-separated list to exclude"
+    required: false
+    default: ""
+  languages_extra_excluded_languages:
+    description: "Additional languages to exclude"
+    required: false
+    default: ""
+  languages_min_percentage:
+    description: "Minimum percentage threshold"
+    required: false
+    default: ""
+  languages_start_marker:
+    description: "Custom README start marker"
+    required: false
+    default: ""
+  languages_end_marker:
+    description: "Custom README end marker"
+    required: false
+    default: ""
+  languages_username:
+    description: "Override username for languages card only"
+    required: false
+    default: ""
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python_version }}
+
+    - name: Install re-po
+      shell: bash
+      run: |
+        set -euo pipefail
+        pip install .
+
+    - name: Run card
+      shell: bash
+      run: |
+        set -euo pipefail
+        ARGS=(--card "${{ inputs.card }}" --token "${{ inputs.token }}")
+        if [ -n "${{ inputs.actor }}" ]; then
+          ARGS+=("--actor" "${{ inputs.actor }}")
+        fi
+        if [ -n "${{ inputs.username }}" ]; then
+          ARGS+=("--username" "${{ inputs.username }}")
+        fi
+        if [ -n "${{ inputs.readme_path }}" ]; then
+          ARGS+=("--readme-path" "${{ inputs.readme_path }}")
+        fi
+
+        if [ "${{ inputs.card }}" = "languages" ]; then
+          if [ -n "${{ inputs.languages_username }}" ]; then
+            ARGS+=("--option" "username=${{ inputs.languages_username }}")
+          fi
+          if [ -n "${{ inputs.languages_output_mode }}" ]; then
+            ARGS+=("--option" "output_mode=${{ inputs.languages_output_mode }}")
+          fi
+          if [ -n "${{ inputs.languages_max_languages }}" ]; then
+            ARGS+=("--option" "max_languages=${{ inputs.languages_max_languages }}")
+          fi
+          if [ -n "${{ inputs.languages_excluded_languages }}" ]; then
+            ARGS+=("--option" "excluded_languages=${{ inputs.languages_excluded_languages }}")
+          fi
+          if [ -n "${{ inputs.languages_extra_excluded_languages }}" ]; then
+            ARGS+=("--option" "extra_excluded_languages=${{ inputs.languages_extra_excluded_languages }}")
+          fi
+          if [ -n "${{ inputs.languages_min_percentage }}" ]; then
+            ARGS+=("--option" "min_percentage=${{ inputs.languages_min_percentage }}")
+          fi
+          if [ -n "${{ inputs.languages_start_marker }}" ]; then
+            ARGS+=("--option" "start_marker=${{ inputs.languages_start_marker }}")
+          fi
+          if [ -n "${{ inputs.languages_end_marker }}" ]; then
+            ARGS+=("--option" "end_marker=${{ inputs.languages_end_marker }}")
+          fi
+        fi
+
+        python -m repo.core.runner "${ARGS[@]}"
+
