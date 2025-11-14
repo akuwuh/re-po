@@ -69,7 +69,7 @@ runs:
       shell: bash
       run: |
         set -euo pipefail
-        pip install .
+        pip install "${{ github.action_path }}"
 
     - name: Run card
       shell: bash
