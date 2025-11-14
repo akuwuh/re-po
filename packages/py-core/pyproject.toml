@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "lang-stats"
+name = "re-po"
 version = "3.0.0"
 description = "GitHub language statistics visualizer with 3D box effects"
 readme = "../../README.md"
@@ -47,4 +47,7 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
+
+[project.scripts]
+generate-langs = "lang_stats.generate_langs:main"
 

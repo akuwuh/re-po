@@ -10,7 +10,7 @@ readme_file = Path(__file__).parent.parent.parent / 'README.md'
 long_description = readme_file.read_text(encoding='utf-8') if readme_file.exists() else ''
 
 setup(
-    name='lang-stats',
+    name='re-po',
     version='3.0.0',
     description='GitHub language statistics visualizer with 3D box effects',
     long_description=long_description,
@@ -47,6 +47,11 @@ setup(
     project_urls={
         'Bug Reports': 'https://github.com/yourusername/akuwuh/issues',
         'Source': 'https://github.com/yourusername/akuwuh',
+    },
+    entry_points={
+        'console_scripts': [
+            'generate-langs=lang_stats.generate_langs:main',
+        ],
     },
 )
 
