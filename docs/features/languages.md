@@ -15,7 +15,7 @@ updates a README snippet (text mode) or renders two SVG assets
 | `username` | Override for the analyzed account | `actor` |
 | `readme_path` | README to update when in text mode | `README.md` |
 | `languages_output_mode` | `vector` or `text` | `vector` |
-| `languages_max_languages` | Limit of languages displayed | unset |
+| `languages_max_languages` | Limit of languages displayed (number or quoted string) | unset |
 | `languages_excluded_languages` | Comma-separated values | `JavaScript,HTML,CSS,SCSS` |
 | `languages_extra_excluded_languages` | Additional exclusions | unset |
 | `languages_min_percentage` | Drop languages below this percentage | unset |
@@ -41,7 +41,7 @@ updates a README snippet (text mode) or renders two SVG assets
     token: ${{ secrets.GITHUB_TOKEN }}
     actor: ${{ github.repository_owner }}
     languages_output_mode: vector
-    languages_max_languages: "6"
+    languages_max_languages: 6
     languages_excluded_languages: "HTML,CSS"
 ```
 

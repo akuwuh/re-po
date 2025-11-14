@@ -131,30 +131,36 @@ def _run_job(options: LanguageOptions) -> FeatureResult:
     return result
 
 
-def _parse_float(value: Optional[str]) -> Optional[float]:
+def _parse_float(value: Optional[object]) -> Optional[float]:
     if value in (None, ''):
         return None
-    try:
+    if isinstance(value, (int, float)):
         return float(value)
-    except ValueError:
+    try:
+        return float(str(value).strip())
+    except (ValueError, AttributeError):
         print(f"Warning: Invalid float '{value}', ignoring.")
         return None
 
 
-def _parse_int(value: Optional[str]) -> Optional[int]:
+def _parse_int(value: Optional[object]) -> Optional[int]:
     if value in (None, ''):
         return None
-    try:
+    if isinstance(value, (int, float)):
         return int(value)
-    except ValueError:
+    try:
+        return int(str(value).strip())
+    except (ValueError, AttributeError):
         print(f"Warning: Invalid integer '{value}', ignoring.")
         return None
 
 
-def _parse_list(value: Optional[str]) -> List[str]:
+def _parse_list(value: Optional[object]) -> List[str]:
     if value in (None, ''):
         return []
-    return [item.strip() for item in value.split(',') if item.strip()]
+    if isinstance(value, list):
+        return [str(item).strip() for item in value if str(item).strip()]
+    return [item.strip() for item in str(value).split(',') if item.strip()]
 
 
 def _build_options_from_env() -> LanguageOptions:
