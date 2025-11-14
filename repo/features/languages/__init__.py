@@ -14,7 +14,7 @@ Architecture:
 
 Example usage:
     >>> from repo.features.languages import LanguageStatsService, RenderConfig
-    >>>
+    >>> 
     >>> service = LanguageStatsService(github_token="your_token", username="yourusername")
     >>> config = RenderConfig.default_light()
     >>> svg = service.generate_svg(config=config)

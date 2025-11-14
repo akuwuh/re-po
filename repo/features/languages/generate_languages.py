@@ -118,11 +118,11 @@ def _run_job(options: LanguageOptions) -> FeatureResult:
     html_block = _lines_to_html(text_lines)
 
     update_section(
-        html_block,
+            html_block,
         readme_path=options.readme_path,
         start_marker=options.start_marker,
         end_marker=options.end_marker,
-    )
+        )
     print(f"✓ Updated {options.readme_path}")
     result.html_block = html_block
     result.start_marker = options.start_marker
