@@ -13,7 +13,7 @@ Architecture:
     - extrusion_styles/ : Pluggable 3D rendering strategies
 
 Example usage:
-    >>> from lang_stats import LanguageStatsService, RenderConfig
+    >>> from re_po.lang_stats import LanguageStatsService, RenderConfig
     >>> 
     >>> service = LanguageStatsService(github_token="your_token", username="yourusername")
     >>> config = RenderConfig.default_light()
@@ -38,7 +38,7 @@ from . import extrusion_styles
 # Legacy compatibility (backward compatible)
 # Note: Legacy imports disabled to avoid circular dependencies
 # If you need old API, import directly from legacy module:
-# from lang_stats.legacy import generate_language_stats, generate_language_stats_svg
+# from re_po.lang_stats.legacy import generate_language_stats, generate_language_stats_svg
 
 __all__ = [
     # Main API (recommended)

@@ -9,13 +9,13 @@ The system generates language statistics visualizations with configurable 3D box
 ## Project Structure
 
 ```
-lang_stats/
+re_po/lang_stats/
 ├── __init__.py                    # Package entry point
 ├── config.py                      # Configuration constants
 ├── fetcher.py                     # GitHub API data fetching
 ├── formatter.py                   # Text formatting utilities
 ├── generator.py                   # Main orchestration logic
-├── svg_generator.py               # SVG rendering orchestrator
+├── rendering/svg/renderer.py               # SVG rendering orchestrator
 ├── html_converter.py              # HTML conversion utilities
 ├── box_drawer.py                  # Text-based box drawing
 ├── readme_updater.py              # README file updating
@@ -41,7 +41,7 @@ lang_stats/
    - Responsibility: Format data for display
    - Domain entities: Progress bars, percentages, text layout
 
-3. **Rendering Context** (`svg_generator.py`, `extrusion_styles/`)
+3. **Rendering Context** (`rendering/svg/renderer.py`, `extrusion_styles/`)
    - Responsibility: Generate visual representations
    - Domain entities: SVG elements, 3D boxes, extrusion styles
    - **Key abstraction**: `ExtrusionStyle` strategy pattern
@@ -102,7 +102,7 @@ def render(self, x, y, width, height, extrude_x, extrude_y, color):
 ### Single Responsibility Principle (SRP)
 - ✅ Each style class has ONE job: render its specific extrusion type
 - ✅ Factory has ONE job: create style instances
-- ✅ `svg_generator.py` orchestrates, doesn't implement styles
+- ✅ `rendering/svg/renderer.py` orchestrates, doesn't implement styles
 
 ### Open/Closed Principle (OCP)
 - ✅ Open for extension: Add new styles by creating new classes
@@ -117,7 +117,7 @@ def render(self, x, y, width, height, extrude_x, extrude_y, color):
 - ✅ Clients only depend on methods they use
 
 ### Dependency Inversion Principle (DIP)
-- ✅ `svg_generator.py` depends on `ExtrusionStyle` abstraction
+- ✅ `rendering/svg/renderer.py` depends on `ExtrusionStyle` abstraction
 - ✅ Concrete styles are injected via factory
 
 ## Data Flow
@@ -142,7 +142,7 @@ File System / README
 
 ## Configuration
 
-Configuration is centralized in `config.py` and `svg_generator.py`:
+Configuration is centralized in `config.py` and `rendering/svg/renderer.py`:
 
 - `EXTRUSION_STYLE`: Select style (1, 2, etc.)
 - `EXTRUSION_DEPTH_X/Y`: Control 3D depth
@@ -184,7 +184,7 @@ Configuration is centralized in `config.py` and `svg_generator.py`:
 
 4. **Use it:**
    ```python
-   EXTRUSION_STYLE = 3  # In svg_generator.py
+   EXTRUSION_STYLE = 3  # In rendering/svg/renderer.py
    ```
 
 ## Testing Strategy

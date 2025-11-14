@@ -8,8 +8,8 @@ Successfully refactored the extrusion rendering logic from a monolithic implemen
 
 ### Before (Monolithic)
 ```
-lang_stats/
-├── svg_generator.py  (424 lines - contained all style logic)
+re_po/lang_stats/
+├── rendering/svg/renderer.py  (424 lines - contained all style logic)
     ├── draw_front_box()
     ├── draw_style1_back_box()
     ├── draw_style2_connected_extrusion()
@@ -25,8 +25,8 @@ lang_stats/
 
 ### After (Modular DDD)
 ```
-lang_stats/
-├── svg_generator.py  (332 lines - simplified)
+re_po/lang_stats/
+├── rendering/svg/renderer.py  (332 lines - simplified)
 │   └── draw_3d_box_borders() (delegates to factory)
 └── extrusion_styles/
     ├── __init__.py              # Public API
@@ -71,10 +71,10 @@ ExtrusionStyle (ABC)
 
 ### Usage Remains Backward Compatible
 
-The public API hasn't changed. The `svg_generator.py` still exports the same functions:
+The public API hasn't changed. The `rendering/svg/renderer.py` still exports the same functions:
 
 ```python
-from lang_stats import generate_language_stats_svg
+from re_po.lang_stats import generate_language_stats_svg
 
 svg = generate_language_stats_svg(lang_stats, theme='light')
 ```
@@ -84,7 +84,7 @@ svg = generate_language_stats_svg(lang_stats, theme='light')
 You can now use the extrusion styles directly:
 
 ```python
-from lang_stats.extrusion_styles import ExtrusionStyleFactory
+from re_po.lang_stats.extrusion_styles import ExtrusionStyleFactory
 
 # Create any style
 style = ExtrusionStyleFactory.create(1, stroke_width=2)
@@ -108,7 +108,7 @@ All tests pass:
 ## Code Metrics
 
 ### Lines of Code
-- `svg_generator.py`: 424 → 332 lines (-92 lines)
+- `rendering/svg/renderer.py`: 424 → 332 lines (-92 lines)
 - New modules: +320 lines (but modular and reusable)
 
 ### Complexity
@@ -156,7 +156,7 @@ __all__ = [..., 'IsometricExtrusion']
 
 ### 4. Use It
 ```python
-# svg_generator.py
+# rendering/svg/renderer.py
 EXTRUSION_STYLE = 3  # ← Change config
 ```
 
@@ -189,7 +189,7 @@ EXTRUSION_STYLE = 3  # ← Change config
 - ✅ Migrated Style 1 to `BackBoxExtrusion`
 - ✅ Migrated Style 2 to `ConnectedExtrusion`
 - ✅ Implemented `ExtrusionStyleFactory`
-- ✅ Updated `svg_generator.py` to use new architecture
+- ✅ Updated `rendering/svg/renderer.py` to use new architecture
 - ✅ Added comprehensive documentation
 - ✅ Verified backward compatibility
 - ✅ All tests passing

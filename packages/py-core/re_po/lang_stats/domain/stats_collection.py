@@ -2,7 +2,7 @@
 Domain model for a collection of language statistics
 """
 
-from typing import List, Iterator
+from typing import Iterable, Iterator, List
 from .language_stat import LanguageStat
 
 
@@ -34,6 +34,42 @@ class StatsCollection:
         total = sum(stat.percentage for stat in self._stats)
         if not (99.0 <= total <= 101.0):  # Allow for rounding
             raise ValueError(f"Percentages must sum to ~100%, got {total:.2f}%")
+
+    @staticmethod
+    def _normalize(stats: List[LanguageStat]) -> List[LanguageStat]:
+        """Normalize percentages to sum to ~100 based on bytes when available."""
+        if not stats:
+            raise ValueError("Stats collection cannot be empty")
+
+        total_bytes = sum(stat.bytes for stat in stats if stat.bytes > 0)
+        if total_bytes > 0:
+            return [
+                LanguageStat(
+                    name=stat.name,
+                    percentage=(stat.bytes / total_bytes) * 100,
+                    bytes=stat.bytes,
+                )
+                for stat in stats
+            ]
+
+        total_percentage = sum(stat.percentage for stat in stats)
+        if total_percentage <= 0:
+            raise ValueError("Cannot normalize statistics with zero total percentage")
+
+        return [
+            LanguageStat(
+                name=stat.name,
+                percentage=(stat.percentage / total_percentage) * 100,
+                bytes=stat.bytes,
+            )
+            for stat in stats
+        ]
+
+    @classmethod
+    def _from_filtered(cls, stats: List[LanguageStat]) -> 'StatsCollection':
+        """Create new StatsCollection from filtered stats."""
+        normalized = cls._normalize(stats)
+        return cls(normalized)
     
     @property
     def stats(self) -> List[LanguageStat]:
@@ -62,6 +98,26 @@ class StatsCollection:
         """
         return self._stats[:n]
     
+    def exclude_languages(self, languages: Iterable[str]) -> 'StatsCollection':
+        """
+        Create a new collection without the specified languages.
+
+        Args:
+            languages: Iterable of language names to exclude (case-insensitive)
+
+        Returns:
+            New StatsCollection with excluded languages removed and percentages normalized.
+        """
+        exclusions = {lang.strip().lower() for lang in languages if lang and lang.strip()}
+        if not exclusions:
+            return self
+
+        filtered = [stat for stat in self._stats if stat.name.lower() not in exclusions]
+        if not filtered:
+            raise ValueError("All languages were excluded; a minimum of one language is required")
+
+        return self._from_filtered(filtered)
+
     def filter_by_threshold(self, min_percentage: float) -> 'StatsCollection':
         """
         Get new collection with languages above threshold.
@@ -75,7 +131,26 @@ class StatsCollection:
         filtered = [s for s in self._stats if s.percentage >= min_percentage]
         if not filtered:
             raise ValueError(f"No languages above {min_percentage}% threshold")
-        return StatsCollection(filtered)
+        return self._from_filtered(filtered)
+
+    def limit(self, max_languages: int) -> 'StatsCollection':
+        """
+        Limit the collection to the top N languages.
+
+        Args:
+            max_languages: Maximum number of languages to keep
+
+        Returns:
+            New StatsCollection with at most N languages
+        """
+        if max_languages <= 0:
+            raise ValueError("max_languages must be greater than zero")
+
+        if len(self._stats) <= max_languages:
+            return self
+
+        limited = self._stats[:max_languages]
+        return self._from_filtered(limited)
     
     def to_tuples(self) -> List[tuple]:
         """

@@ -6,13 +6,13 @@ The vectorizing module has been successfully implemented, allowing users to choo
 
 ## 📦 New Files Created
 
-1. **`lang_stats/svg_generator.py`** (254 lines)
+1. **`re_po/lang_stats/rendering/svg/renderer.py`** (254 lines)
    - Core SVG generation module
    - Supports graphical and text-based progress bars
    - Light and dark theme support
    - Helper functions for reduced complexity
 
-2. **`lang_stats/README.md`** (Comprehensive documentation)
+2. **`re_po/lang_stats/README.md`** (Comprehensive documentation)
    - Usage examples
    - Configuration guide
    - API reference
@@ -30,17 +30,17 @@ The vectorizing module has been successfully implemented, allowing users to choo
 
 ## 🔄 Modified Files
 
-1. **`lang_stats/config.py`**
+1. **`re_po/lang_stats/config.py`**
    - Added `OUTPUT_MODE` configuration
    - Added `USE_GRAPHICAL_BARS` setting
    - Added `SVG_THEME` setting
 
-2. **`lang_stats/generator.py`**
+2. **`re_po/lang_stats/generator.py`**
    - Updated to support both output modes
    - Added parameters for mode selection
    - Maintained backward compatibility
 
-3. **`lang_stats/__init__.py`**
+3. **`re_po/lang_stats/__init__.py`**
    - Added SVG generator to exports
    - Updated version to 2.0.0
    - Improved documentation
@@ -83,7 +83,7 @@ The vectorizing module has been successfully implemented, allowing users to choo
 
 **Method 1: Config File**
 ```python
-# .github/scripts/lang_stats/config.py
+# .github/scripts/re_po/lang_stats/config.py
 OUTPUT_MODE = 'vector'
 ```
 
@@ -165,13 +165,13 @@ All tests passed successfully:
 ## 🔍 Architecture
 
 ```
-lang_stats/
+re_po/lang_stats/
 ├── config.py              # Configuration (OUTPUT_MODE, etc.)
 ├── fetcher.py             # GitHub API data fetching
 ├── formatter.py           # Content formatting
 ├── box_drawer.py          # Text-based box drawing
 ├── html_converter.py      # HTML conversion
-├── svg_generator.py       # SVG generation (NEW!)
+├── rendering/svg/renderer.py       # SVG generation (NEW!)
 │   ├── generate_svg_3d_box()
 │   ├── generate_svg_with_bars()
 │   └── generate_language_stats_svg()
@@ -228,7 +228,7 @@ The implementation is production-ready:
 ## 📚 Documentation
 
 - **Quick Start**: `VECTORIZING_GUIDE.md`
-- **Full Documentation**: `lang_stats/README.md`
+- **Full Documentation**: `re_po/lang_stats/README.md`
 - **Test Suite**: `test_output_modes.py`
 - **This Summary**: `IMPLEMENTATION_SUMMARY.md`
 

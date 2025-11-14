@@ -50,7 +50,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'generate-langs=lang_stats.generate_langs:main',
+            'generate-langs=re_po.lang_stats.generate_langs:main',
         ],
     },
 )

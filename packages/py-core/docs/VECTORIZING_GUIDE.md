@@ -15,7 +15,7 @@ Both modes produce identical visual appearance with 3D extrusion effects and pro
 
 **Option 1: Config File** (Permanent)
 ```python
-# Edit .github/scripts/lang_stats/config.py
+# Edit .github/scripts/re_po/lang_stats/config.py
 OUTPUT_MODE = 'vector'  # Change from 'text' to 'vector'
 ```
 
@@ -97,7 +97,7 @@ This will:
 - Check workflow logs for errors
 
 ### Bars look misaligned?
-- Adjust `CHAR_WIDTH` in `svg_generator.py` (default: 9.6)
+- Adjust `CHAR_WIDTH` in `rendering/svg/renderer.py` (default: 9.6)
 - Try values between 9.0 and 10.5
 
 ### Want to switch back to text mode?
@@ -149,7 +149,7 @@ Or use repository variables for easier switching:
 ### Python API
 
 ```python
-from lang_stats.generator import generate_language_stats
+from re_po.lang_stats.generator import generate_language_stats
 
 stats = [
     ('TypeScript', 34.3),
@@ -180,7 +180,7 @@ svg_dark = generate_language_stats(
 
 ### Colors (Vector Mode)
 
-Edit `svg_generator.py`:
+Edit `rendering/svg/renderer.py`:
 
 ```python
 COLORS_LIGHT = {
@@ -236,7 +236,7 @@ FONT_SIZE = 16     # Font size in pixels
 
 ## 🔗 Files Modified
 
-- ✅ `svg_generator.py` - New SVG generation module
+- ✅ `rendering/svg/renderer.py` - New SVG generation module
 - ✅ `generator.py` - Updated to support both modes
 - ✅ `config.py` - Added output mode configuration
 - ✅ `generate_langs.py` - Added environment variable support

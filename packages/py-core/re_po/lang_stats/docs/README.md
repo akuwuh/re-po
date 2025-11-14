@@ -46,7 +46,7 @@ Same visual appearance but rendered as true vector graphics with smooth, scalabl
 ## Configuration
 
 ### Method 1: Config File
-Edit `.github/scripts/lang_stats/config.py`:
+Edit `.github/scripts/re_po/lang_stats/config.py`:
 
 ```python
 OUTPUT_MODE = 'vector'  # Options: 'text', 'vector'
@@ -102,7 +102,7 @@ OUTPUT_MODE=vector USE_GRAPHICAL_BARS=false python .github/scripts/generate_lang
 
 ### Programmatic Usage
 ```python
-from lang_stats.generator import generate_language_stats
+from re_po.lang_stats.generator import generate_language_stats
 
 lang_stats = [
     ('TypeScript', 34.3),
@@ -135,14 +135,14 @@ svg_dark = generate_language_stats(
 ## Module Structure
 
 ```
-lang_stats/
+re_po/lang_stats/
 ├── __init__.py           # Package initialization
 ├── config.py             # Configuration constants
 ├── fetcher.py            # GitHub API data fetching
 ├── formatter.py          # Content formatting
 ├── box_drawer.py         # Text-based box drawing
 ├── html_converter.py     # HTML conversion utilities
-├── svg_generator.py      # SVG generation (NEW!)
+├── rendering/svg/renderer.py      # SVG generation (NEW!)
 ├── generator.py          # Main orchestration
 └── readme_updater.py     # README.md updater
 ```
@@ -223,7 +223,7 @@ MAX_LANGUAGES = 10  # Show top 10 languages
 ## Troubleshooting
 
 ### Vector output looks misaligned
-- Adjust `CHAR_WIDTH` in `svg_generator.py` (default: 9.6)
+- Adjust `CHAR_WIDTH` in `rendering/svg/renderer.py` (default: 9.6)
 - Ensure monospace font is used
 
 ### Bars don't match percentages
@@ -232,7 +232,7 @@ MAX_LANGUAGES = 10  # Show top 10 languages
 
 ### Colors not showing correctly
 - Verify theme setting (`'light'` or `'dark'`)
-- Check color definitions in `svg_generator.py`
+- Check color definitions in `rendering/svg/renderer.py`
 
 ### Mode not changing
 - Environment variables take precedence over config
@@ -243,7 +243,7 @@ MAX_LANGUAGES = 10  # Show top 10 languages
 
 When adding new features:
 1. Maintain consistency between text and vector modes
-2. Update both `box_drawer.py` and `svg_generator.py`
+2. Update both `box_drawer.py` and `rendering/svg/renderer.py`
 3. Add configuration options to `config.py`
 4. Update this README
 5. Test both output modes

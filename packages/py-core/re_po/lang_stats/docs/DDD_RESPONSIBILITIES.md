@@ -3,7 +3,7 @@
 ## Project Structure (CLEAN!)
 
 ```
-lang_stats/                        📦 MAIN PACKAGE
+re_po/lang_stats/                        📦 MAIN PACKAGE
 │
 ├── __init__.py                    🚪 Public API Entry Point
 │
@@ -61,7 +61,7 @@ lang_stats/                        📦 MAIN PACKAGE
     ├── generator.py               ↳ Old generator
     ├── html_converter.py          ↳ Old HTML converter
     ├── readme_updater.py          ↳ Old README updater
-    └── svg_generator.py           ↳ Old SVG generator
+    └── rendering/svg/renderer.py           ↳ Old SVG generator
 ```
 
 ---
@@ -383,7 +383,7 @@ SVG OUTPUT
 
 ```python
 # Use the service layer - it handles everything
-from lang_stats import LanguageStatsService, RenderConfig
+from re_po.lang_stats import LanguageStatsService, RenderConfig
 
 service = LanguageStatsService(username="user")
 svg = service.generate_svg()  # Easy!
@@ -393,9 +393,9 @@ svg = service.generate_svg()  # Easy!
 
 ```python
 # Use components directly for more control
-from lang_stats.infrastructure import GitHubClient
-from lang_stats.rendering.svg import SVGRenderer
-from lang_stats.core import RenderConfig
+from re_po.lang_stats.infrastructure import GitHubClient
+from re_po.lang_stats.rendering.svg import SVGRenderer
+from re_po.lang_stats.core import RenderConfig
 
 # 1. Fetch (infrastructure layer)
 client = GitHubClient(token="...")
@@ -412,7 +412,7 @@ svg = renderer.render(stats)
 ```python
 # Mock at layer boundaries
 from unittest.mock import Mock
-from lang_stats.domain import StatsCollection, LanguageStat
+from re_po.lang_stats.domain import StatsCollection, LanguageStat
 
 # Create test data (domain objects)
 test_stats = StatsCollection([

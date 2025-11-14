@@ -49,5 +49,5 @@ python_classes = ["Test*"]
 python_functions = ["test_*"]
 
 [project.scripts]
-generate-langs = "lang_stats.generate_langs:main"
+generate-langs = "re_po.lang_stats.generate_langs:main"
 

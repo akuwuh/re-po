@@ -32,8 +32,8 @@ Three `.gitignore` files have been strategically placed to ensure proper version
 - Temporary files
 - Development logs
 
-### 3. Package Level: `.github/scripts/lang_stats/.gitignore`
-**Location**: `/Users/cute/Documents/vsc/akuwuh/.github/scripts/lang_stats/.gitignore`
+### 3. Package Level: `.github/scripts/re_po/lang_stats/.gitignore`
+**Location**: `/Users/cute/Documents/vsc/akuwuh/.github/scripts/re_po/lang_stats/.gitignore`
 
 **Purpose**: Package-specific ignores for the lang_stats module
 
@@ -131,7 +131,7 @@ To verify gitignore is working:
 ```bash
 # Check if specific files are ignored
 git check-ignore -v .github/scripts/test_output/sample_dark.svg
-git check-ignore -v .github/scripts/lang_stats/__pycache__
+git check-ignore -v .github/scripts/re_po/lang_stats/__pycache__
 
 # See what's being tracked
 git status --short
@@ -171,7 +171,7 @@ The gitignore files themselves should be committed:
 ```bash
 git add .gitignore
 git add .github/scripts/.gitignore
-git add .github/scripts/lang_stats/.gitignore
+git add .github/scripts/re_po/lang_stats/.gitignore
 git commit -m "Add comprehensive .gitignore files for Python project"
 ```
 
@@ -221,7 +221,7 @@ echo "my_custom_file.txt" >> .gitignore
 echo "custom_script_output/" >> .github/scripts/.gitignore
 
 # For package-specific ignores
-echo "deprecated_modules/" >> .github/scripts/lang_stats/.gitignore
+echo "deprecated_modules/" >> .github/scripts/re_po/lang_stats/.gitignore
 ```
 
 ### Unignoring Files

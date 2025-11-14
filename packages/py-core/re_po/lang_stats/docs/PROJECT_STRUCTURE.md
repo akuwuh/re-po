@@ -5,7 +5,7 @@ This document describes the professional Python project structure following Doma
 ## Directory Layout
 
 ```
-lang_stats/                          # Main package
+re_po/lang_stats/                          # Main package
 │
 ├── __init__.py                      # Public API exports
 │
@@ -47,7 +47,7 @@ lang_stats/                          # Main package
 │
 ├── legacy/                          # 📦 LEGACY (backward compat)
 │   ├── generator.py                 # Old generate_language_stats()
-│   ├── svg_generator.py             # Old generate_language_stats_svg()
+│   ├── rendering/svg/renderer.py             # Old generate_language_stats_svg()
 │   ├── formatter.py                 # Old formatters
 │   ├── box_drawer.py                # Old box drawing
 │   ├── html_converter.py            # Old HTML converter
@@ -250,7 +250,7 @@ Each class/module has one reason to change.
 ### Simple Usage (Service API)
 
 ```python
-from lang_stats import LanguageStatsService, RenderConfig
+from re_po.lang_stats import LanguageStatsService, RenderConfig
 
 # Create service
 service = LanguageStatsService(
@@ -267,9 +267,9 @@ print(svg)
 ### Advanced Usage (Direct Components)
 
 ```python
-from lang_stats.infrastructure import GitHubClient
-from lang_stats.rendering.svg import SVGRenderer
-from lang_stats.core import RenderConfig
+from re_po.lang_stats.infrastructure import GitHubClient
+from re_po.lang_stats.rendering.svg import SVGRenderer
+from re_po.lang_stats.core import RenderConfig
 
 # Fetch data
 client = GitHubClient(token="your_token")
@@ -284,7 +284,7 @@ svg = renderer.render(stats)
 ### Custom Extrusion Style
 
 ```python
-from lang_stats.extrusion_styles import ExtrusionStyle, ExtrusionStyleFactory
+from re_po.lang_stats.extrusion_styles import ExtrusionStyle, ExtrusionStyleFactory
 
 # Define custom style
 class IsometricExtrusion(ExtrusionStyle):
@@ -328,13 +328,13 @@ tests/integration/
 
 **Before:**
 ```python
-from lang_stats import generate_language_stats_svg
+from re_po.lang_stats import generate_language_stats_svg
 svg = generate_language_stats_svg(stats, theme='light')
 ```
 
 **After (recommended):**
 ```python
-from lang_stats import LanguageStatsService, RenderConfig
+from re_po.lang_stats import LanguageStatsService, RenderConfig
 service = LanguageStatsService(username="user")
 config = RenderConfig.default_light()
 svg = service.generate_svg(config=config)
@@ -342,7 +342,7 @@ svg = service.generate_svg(config=config)
 
 **After (backward compatible):**
 ```python
-from lang_stats import generate_language_stats_svg  # Still works!
+from re_po.lang_stats import generate_language_stats_svg  # Still works!
 svg = generate_language_stats_svg(stats, theme='light')
 ```
 

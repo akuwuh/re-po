@@ -6,7 +6,7 @@
 
 📁 FINAL STRUCTURE
 ───────────────────────────────────────────────────────────────────────────────
-lang_stats/
+re_po/lang_stats/
 ├── __init__.py           🚪 Public API entry point
 │
 ├── domain/               🎯 PURE BUSINESS LOGIC
@@ -74,18 +74,18 @@ extrusion_styles/factory.py →  "I CREATE styles"
 ✅ WHAT CHANGED FROM MESSY TO CLEAN:
 
 BEFORE (Messy):
-  lang_stats/
+  re_po/lang_stats/
   ├── box_drawer.py         ❌ Mixed concerns
   ├── config.py             ❌ Global config
   ├── fetcher.py            ❌ Mixed with domain
   ├── formatter.py          ❌ Mixed with rendering
   ├── generator.py          ❌ Does everything
-  ├── svg_generator.py      ❌ Too big
+  ├── rendering/svg/renderer.py      ❌ Too big
   ├── ARCHITECTURE.md       ❌ Wrong place
   └── README.md             ❌ Wrong place
 
 AFTER (Clean):
-  lang_stats/
+  re_po/lang_stats/
   ├── domain/               ✅ Pure business logic
   ├── infrastructure/       ✅ External services
   ├── rendering/            ✅ Visualization only
@@ -101,7 +101,7 @@ AFTER (Clean):
 
 1. Simple Usage (Most Common):
    ```python
-   from lang_stats import LanguageStatsService, RenderConfig
+   from re_po.lang_stats import LanguageStatsService, RenderConfig
    
    service = LanguageStatsService(username="user")
    svg = service.generate_svg()  # Done!
@@ -109,15 +109,15 @@ AFTER (Clean):
 
 2. Advanced Usage:
    ```python
-   from lang_stats.core import RenderConfig
-   from lang_stats.infrastructure import GitHubClient
-   from lang_stats.rendering.svg import SVGRenderer
+   from re_po.lang_stats.core import RenderConfig
+   from re_po.lang_stats.infrastructure import GitHubClient
+   from re_po.lang_stats.rendering.svg import SVGRenderer
    
    # Fine-grained control over each layer
    ```
 
 3. Learn More:
-   Read: lang_stats/docs/DDD_RESPONSIBILITIES.md
+   Read: re_po/lang_stats/docs/DDD_RESPONSIBILITIES.md
 
 ═══════════════════════════════════════════════════════════════════════════════
 
