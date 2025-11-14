@@ -46,7 +46,13 @@ def run(argv: List[str] | None = None) -> FeatureResult:
     args = parser.parse_args(argv)
 
     # Lazy-load the requested feature so it can register itself.
-    import_module(f"repo.features.{args.card}")
+    base_module = f"repo.features.{args.card}"
+    import_module(base_module)
+    try:
+        import_module(f"{base_module}.generate_{args.card}")
+    except ModuleNotFoundError:
+        # Some features may register directly from __init__.py.
+        pass
 
     handler = get_feature(args.card)
     config = FeatureConfig(
