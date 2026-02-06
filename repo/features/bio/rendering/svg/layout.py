@@ -39,14 +39,16 @@ class BioLayout:
     rows: Tuple[RowLayout, ...]
 
 def build_layout(request: BioRequest) -> BioLayout:
-    font_size = 15
-    char_width = 8.9
-    line_height = 32.0
+    font_size = 16
+    # Keep this deliberately conservative so dynamic box sizing leaves breathing room.
+    char_width = 9.6
+    line_height = 34.0
     box_x = 20.0
     box_y = 20.0
     shadow_offset = 15.0
-    padding_x = 24.0
+    padding_x = 26.0
     padding_y = 16.0
+    content_right_gutter_chars = 4
 
     label_width_chars = max(len(row.label) for row in request.rows)
     value_width_chars = max(len(f"{row.prefix}{row.value}") for row in request.rows)
@@ -75,7 +77,7 @@ def build_layout(request: BioRequest) -> BioLayout:
 
     title_width = len(request.title) * char_width
     row_width = max_row_chars * char_width
-    content_width = max(title_width, row_width)
+    content_width = max(title_width, row_width) + (content_right_gutter_chars * char_width)
     box_width = content_width + (padding_x * 2)
     box_height = (padding_y * 2) + (line_height * (len(request.rows) + 1))
 
