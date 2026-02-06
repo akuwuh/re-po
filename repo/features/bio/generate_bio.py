@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import os
 import sys
+from pathlib import Path
 
 from repo.core.feature_registry import FeatureConfig, FeatureResult, register_feature
+from repo.core.readme_updater import update_section
 
 from .core import BioRequest
 from .core.parsing import parse_bool, parse_rows_json, parse_str
@@ -14,6 +16,9 @@ from .core.request import (
     DEFAULT_OUTPUT_MODE,
     DEFAULT_START_MARKER,
 )
+from .core.use_case import execute_bio
+from .rendering.svg.renderer import render_svg
+from .rendering.text import render_text_lines
 
 
 def _build_request_from_feature_config(config: FeatureConfig) -> BioRequest:
@@ -67,15 +72,37 @@ def _build_request_from_env() -> BioRequest:
 
 @register_feature("bio")
 def run_feature(config: FeatureConfig) -> FeatureResult:
-    _ = config
-    raise NotImplementedError("Bio feature adapter is wired incrementally")
+    return _run_job(_build_request_from_feature_config(config))
+
+
+def _run_job(request: BioRequest) -> FeatureResult:
+    def _write_text_file(path: str, content: str) -> None:
+        Path(path).write_text(content, encoding="utf-8")
+
+    def _update_readme_section(content: str, readme_path: str, start_marker: str, end_marker: str) -> None:
+        update_section(
+            content,
+            readme_path=readme_path,
+            start_marker=start_marker,
+            end_marker=end_marker,
+        )
+
+    return execute_bio(
+        request,
+        render_text_lines=render_text_lines,
+        render_svg=render_svg,
+        write_text_file=_write_text_file,
+        update_readme_section=_update_readme_section,
+    )
 
 
 def main() -> None:
-    if not os.environ.get("GITHUB_TOKEN"):
-        print("Error: GITHUB_TOKEN not found")
+    try:
+        request = _build_request_from_env()
+    except ValueError as exc:
+        print(f"Error: {exc}")
         sys.exit(1)
-    raise NotImplementedError("Bio feature adapter is wired incrementally")
+    _run_job(request)
 
 
 if __name__ == "__main__":
