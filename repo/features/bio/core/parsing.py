@@ -42,7 +42,7 @@ def parse_rows_json(raw_rows: object) -> Tuple[BioRow, ...]:
                 label=row_data["label"],
                 value=row_data["value"],
                 align=row_data.get("align", "left"),
-                pad=int(row_data.get("pad", 1)),
+                pad=int(row_data.get("pad", 2)),
                 prefix=row_data.get("prefix", "// "),
             )
         )

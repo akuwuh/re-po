@@ -57,21 +57,21 @@ def _format_row_text(
 
 
 def build_layout(request: BioRequest) -> BioLayout:
-    font_size = 16
-    char_width = 9.6
-    line_height = 36.0
+    font_size = 15
+    char_width = 8.9
+    line_height = 32.0
     box_x = 20.0
     box_y = 20.0
     shadow_offset = 15.0
-    padding_x = 30.0
-    padding_y = 18.0
+    padding_x = 24.0
+    padding_y = 16.0
 
-    label_width_chars = max(len(row.label) for row in request.rows)
-    value_width_chars = max(len(f"{row.prefix}{row.value}") for row in request.rows)
+    label_width_chars = max(max(len(row.label) for row in request.rows), 11)
+    value_width_chars = max(max(len(f"{row.prefix}{row.value}") for row in request.rows), 12)
 
     title_x = box_x + padding_x
     title_y = box_y + padding_y + line_height
-    rows_x = title_x
+    rows_x = title_x + (2 * char_width)
 
     row_layouts = []
     max_row_chars = 0
