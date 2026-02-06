@@ -52,6 +52,60 @@ def _parse_list(value: Optional[object]) -> List[str]:
     return [item.strip() for item in str(value).split(',') if item.strip()]
 
 
+def _merge_exclusions(excluded: List[str], extra: List[str]) -> tuple[str, ...]:
+    base = excluded or list(DEFAULT_EXCLUDED_LANGUAGES)
+    return tuple([*base, *extra])
+
+
+def _build_request_from_feature_config(config: FeatureConfig) -> LanguagesRequest:
+    username = (
+        config.options.get('username')
+        or config.username
+        or config.actor
+        or 'akuwuh'
+    )
+    excluded = _parse_list(config.options.get('excluded_languages'))
+    extra = _parse_list(config.options.get('extra_excluded_languages'))
+    return LanguagesRequest(
+        token=config.token,
+        username=username,
+        output_mode=(config.options.get('output_mode') or DEFAULT_OUTPUT_MODE).lower(),
+        excluded_languages=_merge_exclusions(excluded, extra),
+        min_percentage=_parse_float(config.options.get('min_percentage')),
+        max_languages=_parse_int(config.options.get('max_languages')),
+        readme_path=config.options.get('readme_path') or config.readme_path,
+        start_marker=config.options.get('start_marker') or DEFAULT_START_MARKER,
+        end_marker=config.options.get('end_marker') or DEFAULT_END_MARKER,
+    )
+
+
+def _build_request_from_env() -> LanguagesRequest:
+    token = os.environ.get('GITHUB_TOKEN')
+    if not token:
+        print("Error: GITHUB_TOKEN not found")
+        sys.exit(1)
+
+    username = (
+        os.environ.get('GITHUB_ACTOR')
+        or os.environ.get('LANG_STATS_USERNAME')
+        or 'akuwuh'
+    )
+    output_mode = (os.environ.get('OUTPUT_MODE') or DEFAULT_OUTPUT_MODE).strip().lower()
+    excluded = _parse_list(os.environ.get('LANG_STATS_EXCLUDED_LANGUAGES'))
+    extra = _parse_list(os.environ.get('LANG_STATS_EXTRA_EXCLUDED_LANGUAGES'))
+    return LanguagesRequest(
+        token=token,
+        username=username,
+        output_mode=output_mode,
+        excluded_languages=_merge_exclusions(excluded, extra),
+        min_percentage=_parse_float(os.environ.get('LANG_STATS_MIN_PERCENTAGE')),
+        max_languages=_parse_int(os.environ.get('LANG_STATS_MAX_LANGUAGES')),
+        readme_path=os.environ.get('LANG_STATS_README_PATH', 'README.md'),
+        start_marker=os.environ.get('LANG_STATS_START_MARKER', DEFAULT_START_MARKER),
+        end_marker=os.environ.get('LANG_STATS_END_MARKER', DEFAULT_END_MARKER),
+    )
+
+
 def _run_job(request: LanguagesRequest) -> FeatureResult:
     with LanguageStatsService(github_token=request.token, username=request.username) as service:
         text_renderer = TextRenderer()
@@ -90,62 +144,12 @@ def _run_job(request: LanguagesRequest) -> FeatureResult:
 
 @register_feature("languages")
 def run_feature(config: FeatureConfig) -> FeatureResult:
-    username = (
-        config.options.get('username')
-        or config.username
-        or config.actor
-        or 'akuwuh'
-    )
-    excluded = _parse_list(config.options.get('excluded_languages'))
-    extra = _parse_list(config.options.get('extra_excluded_languages'))
-    if not excluded:
-        excluded = list(DEFAULT_EXCLUDED_LANGUAGES)
-
-    request = LanguagesRequest(
-        token=config.token,
-        username=username,
-        output_mode=(config.options.get('output_mode') or DEFAULT_OUTPUT_MODE).lower(),
-        excluded_languages=tuple([*excluded, *extra]),
-        min_percentage=_parse_float(config.options.get('min_percentage')),
-        max_languages=_parse_int(config.options.get('max_languages')),
-        readme_path=config.options.get('readme_path') or config.readme_path,
-        start_marker=config.options.get('start_marker') or DEFAULT_START_MARKER,
-        end_marker=config.options.get('end_marker') or DEFAULT_END_MARKER,
-    )
-    return _run_job(request)
+    return _run_job(_build_request_from_feature_config(config))
 
 
 def main() -> None:
     """Entry point invoked by the console script."""
-    token = os.environ.get('GITHUB_TOKEN')
-    if not token:
-        print("Error: GITHUB_TOKEN not found")
-        sys.exit(1)
-
-    username = (
-        os.environ.get('GITHUB_ACTOR')
-        or os.environ.get('LANG_STATS_USERNAME')
-        or 'akuwuh'
-    )
-    output_mode = (os.environ.get('OUTPUT_MODE') or DEFAULT_OUTPUT_MODE).strip().lower()
-    excluded_languages = (
-        _parse_list(os.environ.get('LANG_STATS_EXCLUDED_LANGUAGES'))
-        or list(DEFAULT_EXCLUDED_LANGUAGES)
-    )
-    extra = _parse_list(os.environ.get('LANG_STATS_EXTRA_EXCLUDED_LANGUAGES'))
-
-    request = LanguagesRequest(
-        token=token,
-        username=username,
-        output_mode=output_mode,
-        excluded_languages=tuple([*excluded_languages, *extra]),
-        min_percentage=_parse_float(os.environ.get('LANG_STATS_MIN_PERCENTAGE')),
-        max_languages=_parse_int(os.environ.get('LANG_STATS_MAX_LANGUAGES')),
-        readme_path=os.environ.get('LANG_STATS_README_PATH', 'README.md'),
-        start_marker=os.environ.get('LANG_STATS_START_MARKER', DEFAULT_START_MARKER),
-        end_marker=os.environ.get('LANG_STATS_END_MARKER', DEFAULT_END_MARKER),
-    )
-    _run_job(request)
+    _run_job(_build_request_from_env())
 
 
 if __name__ == '__main__':
