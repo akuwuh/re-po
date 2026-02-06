@@ -8,7 +8,7 @@ Successfully refactored the extrusion rendering logic from a monolithic implemen
 
 ### Before (Monolithic)
 ```
-re_po/lang_stats/
+repo/features/languages/
 ├── rendering/svg/renderer.py  (424 lines - contained all style logic)
     ├── draw_front_box()
     ├── draw_style1_back_box()
@@ -25,7 +25,7 @@ re_po/lang_stats/
 
 ### After (Modular DDD)
 ```
-re_po/lang_stats/
+repo/features/languages/
 ├── rendering/svg/renderer.py  (332 lines - simplified)
 │   └── draw_3d_box_borders() (delegates to factory)
 └── extrusion_styles/
@@ -74,7 +74,7 @@ ExtrusionStyle (ABC)
 The public API hasn't changed. The `rendering/svg/renderer.py` still exports the same functions:
 
 ```python
-from re_po.lang_stats import generate_language_stats_svg
+from repo.features.languages import generate_language_stats_svg
 
 svg = generate_language_stats_svg(lang_stats, theme='light')
 ```
@@ -84,7 +84,7 @@ svg = generate_language_stats_svg(lang_stats, theme='light')
 You can now use the extrusion styles directly:
 
 ```python
-from re_po.lang_stats.extrusion_styles import ExtrusionStyleFactory
+from repo.features.languages.extrusion_styles import ExtrusionStyleFactory
 
 # Create any style
 style = ExtrusionStyleFactory.create(1, stroke_width=2)

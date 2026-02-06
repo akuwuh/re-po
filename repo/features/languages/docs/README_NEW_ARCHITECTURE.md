@@ -5,7 +5,7 @@
 ## 🎯 Quick Start
 
 ```python
-from re_po.lang_stats import LanguageStatsService, RenderConfig
+from repo.features.languages import LanguageStatsService, RenderConfig
 
 # Create service
 service = LanguageStatsService(
@@ -25,7 +25,7 @@ with open('stats.svg', 'w') as f:
 ## 📁 Project Structure
 
 ```
-re_po/lang_stats/                           Professional Python Package
+repo/features/languages/                           Professional Python Package
 │
 ├── 🎯 domain/                        BUSINESS LOGIC (Pure Python)
 │   ├── language_stat.py              ↳ LanguageStat entity
@@ -96,7 +96,7 @@ re_po/lang_stats/                           Professional Python Package
 ### Example 1: Basic Usage
 
 ```python
-from re_po.lang_stats import LanguageStatsService, RenderConfig
+from repo.features.languages import LanguageStatsService, RenderConfig
 
 service = LanguageStatsService(username="yourusername")
 svg = service.generate_svg()
@@ -119,9 +119,9 @@ svg = service.generate_svg(config=config)
 ### Example 3: Direct Component Usage
 
 ```python
-from re_po.lang_stats.domain import LanguageStat, StatsCollection
-from re_po.lang_stats.rendering.svg import SVGRenderer
-from re_po.lang_stats.core import RenderConfig
+from repo.features.languages.domain import LanguageStat, StatsCollection
+from repo.features.languages.rendering.svg import SVGRenderer
+from repo.features.languages.core import RenderConfig
 
 # Create domain objects
 stats = StatsCollection([
@@ -139,7 +139,7 @@ svg = renderer.render(stats)
 ### Example 4: Custom Extrusion Style
 
 ```python
-from re_po.lang_stats.extrusion_styles import ExtrusionStyle, ExtrusionStyleFactory
+from repo.features.languages.extrusion_styles import ExtrusionStyle, ExtrusionStyleFactory
 
 # Define custom style
 class MyCustomStyle(ExtrusionStyle):
@@ -214,7 +214,7 @@ pytest tests/integration/
 pytest
 
 # With coverage
-pytest --cov=lang_stats
+pytest --cov=repo.features.languages
 ```
 
 ### Manual Testing
@@ -222,7 +222,7 @@ pytest --cov=lang_stats
 ```bash
 cd .github/scripts
 python3 -c "
-from re_po.lang_stats import LanguageStatsService, RenderConfig
+from repo.features.languages import LanguageStatsService, RenderConfig
 service = LanguageStatsService(username='yourusername')
 svg = service.generate_svg()
 print('✅ Works!' if '<svg' in svg else '❌ Failed')
@@ -263,14 +263,14 @@ pip install -r requirements.txt
 ### Old API (Still Works)
 
 ```python
-from re_po.lang_stats import generate_language_stats_svg
+from repo.features.languages import generate_language_stats_svg
 svg = generate_language_stats_svg(stats, theme='light')
 ```
 
 ### New API (Recommended)
 
 ```python
-from re_po.lang_stats import LanguageStatsService, RenderConfig
+from repo.features.languages import LanguageStatsService, RenderConfig
 service = LanguageStatsService(username="user")
 config = RenderConfig.default_light()
 svg = service.generate_svg(config=config)

@@ -5,7 +5,7 @@ This document describes the professional Python project structure following Doma
 ## Directory Layout
 
 ```
-re_po/lang_stats/                          # Main package
+repo/features/languages/                          # Main package
 │
 ├── __init__.py                      # Public API exports
 │
@@ -250,7 +250,7 @@ Each class/module has one reason to change.
 ### Simple Usage (Service API)
 
 ```python
-from re_po.lang_stats import LanguageStatsService, RenderConfig
+from repo.features.languages import LanguageStatsService, RenderConfig
 
 # Create service
 service = LanguageStatsService(
@@ -267,9 +267,9 @@ print(svg)
 ### Advanced Usage (Direct Components)
 
 ```python
-from re_po.lang_stats.infrastructure import GitHubClient
-from re_po.lang_stats.rendering.svg import SVGRenderer
-from re_po.lang_stats.core import RenderConfig
+from repo.features.languages.infrastructure import GitHubClient
+from repo.features.languages.rendering.svg import SVGRenderer
+from repo.features.languages.core import RenderConfig
 
 # Fetch data
 client = GitHubClient(token="your_token")
@@ -284,7 +284,7 @@ svg = renderer.render(stats)
 ### Custom Extrusion Style
 
 ```python
-from re_po.lang_stats.extrusion_styles import ExtrusionStyle, ExtrusionStyleFactory
+from repo.features.languages.extrusion_styles import ExtrusionStyle, ExtrusionStyleFactory
 
 # Define custom style
 class IsometricExtrusion(ExtrusionStyle):
@@ -328,13 +328,13 @@ tests/integration/
 
 **Before:**
 ```python
-from re_po.lang_stats import generate_language_stats_svg
+from repo.features.languages import generate_language_stats_svg
 svg = generate_language_stats_svg(stats, theme='light')
 ```
 
 **After (recommended):**
 ```python
-from re_po.lang_stats import LanguageStatsService, RenderConfig
+from repo.features.languages import LanguageStatsService, RenderConfig
 service = LanguageStatsService(username="user")
 config = RenderConfig.default_light()
 svg = service.generate_svg(config=config)
@@ -342,7 +342,7 @@ svg = service.generate_svg(config=config)
 
 **After (backward compatible):**
 ```python
-from re_po.lang_stats import generate_language_stats_svg  # Still works!
+from repo.features.languages import generate_language_stats_svg  # Still works!
 svg = generate_language_stats_svg(stats, theme='light')
 ```
 

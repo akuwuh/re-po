@@ -23,7 +23,7 @@ Successfully transformed the codebase from a monolithic structure into a profess
 ### Layer Structure
 
 ```
-re_po/lang_stats/
+repo/features/languages/
 ├── domain/              # Business logic (pure Python)
 ├── infrastructure/      # External services (GitHub API)
 ├── rendering/           # Visualization engines
@@ -119,7 +119,7 @@ Core Service (orchestrates)
 
 ```python
 # Legacy - still supported for backward compatibility
-from re_po.lang_stats import generate_language_stats_svg
+from repo.features.languages import generate_language_stats_svg
 svg = generate_language_stats_svg(stats, theme='light')
 ```
 
@@ -127,7 +127,7 @@ svg = generate_language_stats_svg(stats, theme='light')
 
 ```python
 # Modern - clean, professional
-from re_po.lang_stats import LanguageStatsService, RenderConfig
+from repo.features.languages import LanguageStatsService, RenderConfig
 
 service = LanguageStatsService(
     github_token="your_token",
@@ -142,9 +142,9 @@ svg = service.generate_svg(config=config)
 
 ```python
 # Direct component access
-from re_po.lang_stats.infrastructure import GitHubClient
-from re_po.lang_stats.rendering.svg import SVGRenderer
-from re_po.lang_stats.core import RenderConfig
+from repo.features.languages.infrastructure import GitHubClient
+from repo.features.languages.rendering.svg import SVGRenderer
+from repo.features.languages.core import RenderConfig
 
 client = GitHubClient(token="token")
 stats = client.fetch_language_stats("username")
@@ -222,12 +222,12 @@ svg = renderer.render(stats)
 
 **Before:**
 ```python
-from re_po.lang_stats.svg_generator import generate_language_stats_svg
+from repo.features.languages.legacy import generate_language_stats_svg
 ```
 
 **After:**
 ```python
-from re_po.lang_stats import LanguageStatsService, RenderConfig
+from repo.features.languages import LanguageStatsService, RenderConfig
 ```
 
 ### Step 2: Update Usage

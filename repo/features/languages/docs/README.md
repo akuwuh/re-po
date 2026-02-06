@@ -46,7 +46,7 @@ Same visual appearance but rendered as true vector graphics with smooth, scalabl
 ## Configuration
 
 ### Method 1: Config File
-Edit `.github/scripts/re_po/lang_stats/config.py`:
+Edit `.github/scripts/repo/features/languages/config.py`:
 
 ```python
 OUTPUT_MODE = 'vector'  # Options: 'text', 'vector'
@@ -102,7 +102,7 @@ OUTPUT_MODE=vector USE_GRAPHICAL_BARS=false python .github/scripts/generate_lang
 
 ### Programmatic Usage
 ```python
-from re_po.lang_stats.generator import generate_language_stats
+from repo.features.languages.legacy import generate_language_stats
 
 lang_stats = [
     ('TypeScript', 34.3),
@@ -135,7 +135,7 @@ svg_dark = generate_language_stats(
 ## Module Structure
 
 ```
-re_po/lang_stats/
+repo/features/languages/
 ├── __init__.py           # Package initialization
 ├── config.py             # Configuration constants
 ├── fetcher.py            # GitHub API data fetching

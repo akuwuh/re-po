@@ -9,7 +9,7 @@ The system generates language statistics visualizations with configurable 3D box
 ## Project Structure
 
 ```
-re_po/lang_stats/
+repo/features/languages/
 ├── __init__.py                    # Package entry point
 ├── config.py                      # Configuration constants
 ├── fetcher.py                     # GitHub API data fetching
