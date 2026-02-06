@@ -15,7 +15,10 @@ re-po/
 │       │   ├── infrastructure/
 │       │   ├── rendering/
 │       │   └── generate_languages.py
-│       └── bio/               # future cards
+│       └── bio/
+│           ├── core/
+│           ├── rendering/
+│           └── generate_bio.py
 ├── docs/
 └── tests/
 ```
@@ -42,5 +45,4 @@ re-po/
 This layout allows us to ship one Python distribution (`pip install
 "git+https://github.com/akuwuh/re-po.git"`) while keeping the Action entrypoint
 lean and reusable (`uses: akuwuh/re-po@v1` with `card=<name>`).
-
 
