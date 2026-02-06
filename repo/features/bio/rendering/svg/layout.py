@@ -52,7 +52,8 @@ def _format_row_text(
         value_part = value_raw.rjust(value_width_chars)
     else:
         value_part = value_raw.ljust(value_width_chars)
-    return f"│ {branch} {label_part}{' ' * row.pad}{value_part}"
+    # Match text-mode semantics exactly so SVG and text output stay visually aligned.
+    return f"{branch} {label_part}{' ' * row.pad}{value_part}"
 
 
 def build_layout(request: BioRequest) -> BioLayout:
