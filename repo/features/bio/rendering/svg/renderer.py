@@ -42,10 +42,11 @@ def render_svg(request: BioRequest, theme: str) -> str:
         f'<svg width="{layout.svg_width}" height="{layout.svg_height}" xmlns="http://www.w3.org/2000/svg">',
         "  <style>",
         "    .bio-text {",
-        "      font-family: 'Courier New', Courier, monospace;",
-        "      font-size: 35px;",
+        "      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;",
+        f"      font-size: {layout.font_size}px;",
         f'      fill: {colors["text"]};',
-        "      font-weight: 600;",
+        "      font-weight: 500;",
+        "      white-space: pre;",
         "      dominant-baseline: middle;",
         "    }",
         "  </style>",
@@ -89,26 +90,9 @@ def render_svg(request: BioRequest, theme: str) -> str:
     ]
 
     for row_layout in layout.rows:
-        row = row_layout.row
-        branch = "└─" if row_layout.is_last else "├─"
-        value_raw = f"{row.prefix}{row.value}"
-        if row.align == "right":
-            value_text = value_raw.rjust(layout.value_width_chars)
-        else:
-            value_text = value_raw.ljust(layout.value_width_chars)
-        value_x = layout.value_x + ((row.pad - 1) * layout.char_width)
-
+        row_text = row_layout.text
         parts.append(
-            f'    <text x="{layout.label_x - (3 * layout.char_width)}" y="{row_layout.y}" class="bio-text">│</text>'
-        )
-        parts.append(
-            f'    <text x="{layout.label_x - (2 * layout.char_width)}" y="{row_layout.y}" class="bio-text">{branch}</text>'
-        )
-        parts.append(
-            f'    <text x="{layout.label_x}" y="{row_layout.y}" class="bio-text">{_escape_xml(row.label)}</text>'
-        )
-        parts.append(
-            f'    <text x="{value_x}" y="{row_layout.y}" class="bio-text">{_escape_xml(value_text)}</text>'
+            f'    <text x="{layout.rows_x}" y="{row_layout.y}" class="bio-text">{_escape_xml(row_text)}</text>'
         )
 
     parts.extend(["  </g>", "</svg>"])
