@@ -31,7 +31,7 @@ def test_svg_renderer_emits_deterministic_structure() -> None:
 def test_svg_renderer_uses_theme_palette() -> None:
     light_svg = render_svg(_request(), "light")
     dark_svg = render_svg(_request(), "dark")
-    assert "#ffffff" in light_svg
-    assert "#0d1117" in dark_svg
+    assert 'fill="transparent"' in light_svg
+    assert 'fill="transparent"' in dark_svg
     assert "#111111" in light_svg
     assert "#f0f6fc" in dark_svg

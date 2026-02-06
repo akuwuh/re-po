@@ -12,12 +12,12 @@ from .layout import build_layout
 
 THEME_COLORS: Dict[str, Dict[str, str]] = {
     "light": {
-        "bg": "#ffffff",
+        "bg": "transparent",
         "text": "#111111",
         "border": "#111111",
     },
     "dark": {
-        "bg": "#0d1117",
+        "bg": "transparent",
         "text": "#f0f6fc",
         "border": "#f0f6fc",
     },
@@ -56,32 +56,32 @@ def render_svg(request: BioRequest, theme: str) -> str:
             f'    <rect x="{layout.box_x + layout.shadow_offset}" '
             f'y="{layout.box_y + layout.shadow_offset}" '
             f'width="{layout.box_width}" height="{layout.box_height}" '
-            f'fill="none" stroke="{colors["border"]}" stroke-width="3" />'
+            f'fill="none" stroke="{colors["border"]}" stroke-width="2" />'
         ),
         (
             f'    <rect x="{layout.box_x}" y="{layout.box_y}" width="{layout.box_width}" '
-            f'height="{layout.box_height}" fill="{colors["bg"]}" stroke="{colors["border"]}" stroke-width="3" />'
+            f'height="{layout.box_height}" fill="{colors["bg"]}" stroke="{colors["border"]}" stroke-width="2" />'
         ),
         # Connect front/back boxes to preserve the continuous pseudo-3D border look.
         (
             f'    <line x1="{layout.box_x + layout.box_width}" y1="{layout.box_y}" '
             f'x2="{layout.box_x + layout.box_width + layout.shadow_offset}" y2="{layout.box_y}" '
-            f'stroke="{colors["border"]}" stroke-width="3" />'
+            f'stroke="{colors["border"]}" stroke-width="2" />'
         ),
         (
             f'    <line x1="{layout.box_x + layout.box_width + layout.shadow_offset}" y1="{layout.box_y}" '
             f'x2="{layout.box_x + layout.box_width + layout.shadow_offset}" y2="{layout.box_y + layout.shadow_offset}" '
-            f'stroke="{colors["border"]}" stroke-width="3" />'
+            f'stroke="{colors["border"]}" stroke-width="2" />'
         ),
         (
             f'    <line x1="{layout.box_x}" y1="{layout.box_y + layout.box_height}" '
             f'x2="{layout.box_x}" y2="{layout.box_y + layout.box_height + layout.shadow_offset}" '
-            f'stroke="{colors["border"]}" stroke-width="3" />'
+            f'stroke="{colors["border"]}" stroke-width="2" />'
         ),
         (
             f'    <line x1="{layout.box_x}" y1="{layout.box_y + layout.box_height + layout.shadow_offset}" '
             f'x2="{layout.box_x + layout.shadow_offset}" y2="{layout.box_y + layout.box_height + layout.shadow_offset}" '
-            f'stroke="{colors["border"]}" stroke-width="3" />'
+            f'stroke="{colors["border"]}" stroke-width="2" />'
         ),
         "  </g>",
         "",
