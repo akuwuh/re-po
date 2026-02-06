@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from typing import Tuple
 
 from ...core.request import BioRequest, BioRow
+from ..text import render_text_lines
 
 
 @dataclass(frozen=True)
@@ -37,25 +38,6 @@ class BioLayout:
     font_size: int
     rows: Tuple[RowLayout, ...]
 
-
-def _format_row_text(
-    row: BioRow,
-    *,
-    is_last: bool,
-    label_width_chars: int,
-    value_width_chars: int,
-) -> str:
-    branch = "└─" if is_last else "├─"
-    label_part = row.label.ljust(label_width_chars)
-    value_raw = f"{row.prefix}{row.value}"
-    if row.align == "right":
-        value_part = value_raw.rjust(value_width_chars)
-    else:
-        value_part = value_raw.ljust(value_width_chars)
-    # Match text-mode semantics exactly so SVG and text output stay visually aligned.
-    return f"{branch} {label_part}{' ' * row.pad}{value_part}"
-
-
 def build_layout(request: BioRequest) -> BioLayout:
     font_size = 15
     char_width = 8.9
@@ -66,23 +48,21 @@ def build_layout(request: BioRequest) -> BioLayout:
     padding_x = 24.0
     padding_y = 16.0
 
-    label_width_chars = max(max(len(row.label) for row in request.rows), 11)
-    value_width_chars = max(max(len(f"{row.prefix}{row.value}") for row in request.rows), 12)
+    label_width_chars = max(len(row.label) for row in request.rows)
+    value_width_chars = max(len(f"{row.prefix}{row.value}") for row in request.rows)
 
     title_x = box_x + padding_x
     title_y = box_y + padding_y + line_height
     rows_x = title_x + (2 * char_width)
 
+    text_lines = render_text_lines(request)
+    row_text_lines = text_lines[1:]
+
     row_layouts = []
     max_row_chars = 0
     for index, row in enumerate(request.rows):
         is_last = index == len(request.rows) - 1
-        row_text = _format_row_text(
-            row,
-            is_last=is_last,
-            label_width_chars=label_width_chars,
-            value_width_chars=value_width_chars,
-        )
+        row_text = row_text_lines[index]
         max_row_chars = max(max_row_chars, len(row_text))
         row_layouts.append(
             RowLayout(

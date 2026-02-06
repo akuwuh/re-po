@@ -24,7 +24,7 @@ class BioRow:
     label: str
     value: str
     align: str = "left"
-    pad: int = 2
+    pad: int = 1
     prefix: str = "// "
 
     def __post_init__(self) -> None:

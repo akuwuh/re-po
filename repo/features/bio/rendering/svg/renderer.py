@@ -45,7 +45,7 @@ def render_svg(request: BioRequest, theme: str) -> str:
         "      font-family: 'Courier New', Courier, monospace;",
         f"      font-size: {layout.font_size}px;",
         f'      fill: {colors["text"]};',
-        "      font-weight: 600;",
+        "      font-weight: 500;",
         "      white-space: pre;",
         "      dominant-baseline: middle;",
         "    }",
