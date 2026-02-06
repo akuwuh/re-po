@@ -58,6 +58,39 @@ inputs:
     required: false
     default: ""
 
+  bio_output_mode:
+    description: "bio card output mode (vector or text)"
+    required: false
+    default: "vector"
+  bio_rows:
+    description: "JSON array of bio rows"
+    required: false
+    default: ""
+  bio_title:
+    description: "Title shown at the top of the bio card"
+    required: false
+    default: ""
+  bio_update_readme:
+    description: "Whether to patch README markers"
+    required: false
+    default: "true"
+  bio_start_marker:
+    description: "Custom bio README start marker"
+    required: false
+    default: ""
+  bio_end_marker:
+    description: "Custom bio README end marker"
+    required: false
+    default: ""
+  bio_svg_light_file:
+    description: "Output filename for light bio SVG"
+    required: false
+    default: "bio-card-light.svg"
+  bio_svg_dark_file:
+    description: "Output filename for dark bio SVG"
+    required: false
+    default: "bio-card-dark.svg"
+
 runs:
   using: "composite"
   steps:
@@ -114,4 +147,3 @@ runs:
         fi
 
         python -m repo.core.runner "${ARGS[@]}"
-
