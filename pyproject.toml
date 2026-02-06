@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "re-po"
 version = "3.0.0"
 description = "GitHub language statistics visualizer with 3D box effects"
-readme = "README.md"
+readme = "repo/features/languages/docs/README.md"
 requires-python = ">=3.8"
 license = {text = "MIT"}
 keywords = ["github", "statistics", "visualization", "svg"]
@@ -51,4 +51,3 @@ python_functions = ["test_*"]
 [project.scripts]
 generate-languages = "repo.features.languages.generate_languages:main"
 run-card = "repo.core.runner:main"
-

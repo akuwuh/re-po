@@ -1,12 +1,10 @@
-"""
-Setup script for lang_stats package
-"""
+"""Setup script for the re-po package."""
 
 from setuptools import setup, find_packages
 from pathlib import Path
 
-# Read README
-readme_file = Path(__file__).parent / 'README.md'
+# Read package docs README
+readme_file = Path(__file__).parent / 'repo' / 'features' / 'languages' / 'docs' / 'README.md'
 long_description = readme_file.read_text(encoding='utf-8') if readme_file.exists() else ''
 
 setup(
@@ -55,4 +53,3 @@ setup(
         ],
     },
 )
-
