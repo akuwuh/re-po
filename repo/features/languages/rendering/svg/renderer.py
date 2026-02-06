@@ -8,7 +8,6 @@ from ...core.config import RenderConfig
 from ...extrusion_styles import ExtrusionStyleFactory
 from ...utils import escape_xml
 from .patterns import CheckeredPatternGenerator
-from ..progress_bar import ProgressBarRenderer
 
 
 class SVGRenderer:
@@ -30,7 +29,6 @@ class SVGRenderer:
             bar_height=config.bar_height,
             num_squares=6
         )
-        self.progress_renderer = ProgressBarRenderer()
     
     def render(self, stats: StatsCollection) -> str:
         """
@@ -176,4 +174,3 @@ class SVGRenderer:
         parts.append('  </g>')
         
         return '\n'.join(parts)
-
