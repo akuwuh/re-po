@@ -4,6 +4,7 @@ README.md file updater
 
 import re
 import sys
+import warnings
 from .config import START_MARKER, END_MARKER
 
 
@@ -15,6 +16,15 @@ def update_readme(stats_text, readme_path='README.md'):
         stats_text: HTML string to insert
         readme_path: Path to README.md file
     """
+    warnings.warn(
+        (
+            "`repo.features.languages.legacy.update_readme` is deprecated. "
+            "Use `repo.core.readme_updater.update_section`."
+        ),
+        DeprecationWarning,
+        stacklevel=2,
+    )
+
     try:
         with open(readme_path, 'r', encoding='utf-8') as f:
             content = f.read()

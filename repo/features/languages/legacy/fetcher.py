@@ -3,6 +3,7 @@ GitHub API data fetcher for language statistics
 """
 
 import requests
+import warnings
 from collections import defaultdict
 from .config import MAX_LANGUAGES, EXCLUDED_LANGUAGES
 
@@ -19,6 +20,16 @@ def fetch_language_stats(username, token):
         List of tuples: [(language_name, percentage), ...]
         Sorted by percentage descending
     """
+    warnings.warn(
+        (
+            "`repo.features.languages.legacy.fetch_language_stats` is deprecated. "
+            "Use the modern infrastructure client via "
+            "`repo.features.languages.infrastructure.GitHubClient`."
+        ),
+        DeprecationWarning,
+        stacklevel=2,
+    )
+
     headers = {'Authorization': f'token {token}'}
     
     # Get all repos

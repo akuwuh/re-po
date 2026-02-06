@@ -2,6 +2,8 @@
 Main generator that orchestrates the stats generation
 """
 
+import warnings
+
 from .formatter import format_content_lines
 from .box_drawer import draw_3d_border, draw_simple_border
 from .html_converter import convert_to_html
@@ -24,6 +26,16 @@ def generate_language_stats(lang_stats, use_3d=True, output_mode=None, use_graph
     Returns:
         HTML string or SVG string with formatted stats
     """
+    warnings.warn(
+        (
+            "`repo.features.languages.legacy.generate_language_stats` is deprecated. "
+            "Use the modern feature execution path via "
+            "`repo.features.languages.generate_languages`."
+        ),
+        DeprecationWarning,
+        stacklevel=2,
+    )
+
     # Use config defaults if not specified
     if output_mode is None:
         output_mode = OUTPUT_MODE
