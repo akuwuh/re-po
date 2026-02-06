@@ -37,7 +37,12 @@ def test_no_legacy_imports_outside_legacy_folder() -> None:
     violations: list[str] = []
 
     for path in LANGUAGES_ROOT.rglob("*.py"):
-        if path.is_relative_to(LEGACY_ROOT):
+        try:
+            path.relative_to(LEGACY_ROOT)
+            is_legacy_file = True
+        except ValueError:
+            is_legacy_file = False
+        if is_legacy_file:
             continue
         found = _legacy_imports_in_file(path)
         for item in found:
