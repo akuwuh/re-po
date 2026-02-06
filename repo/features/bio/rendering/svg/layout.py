@@ -62,7 +62,7 @@ def build_layout(request: BioRequest) -> BioLayout:
     line_height = 36.0
     box_x = 20.0
     box_y = 20.0
-    shadow_offset = 18.0
+    shadow_offset = 15.0
     padding_x = 30.0
     padding_y = 18.0
 

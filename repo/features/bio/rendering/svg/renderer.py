@@ -6,18 +6,18 @@ from __future__ import annotations
 
 from typing import Dict
 
+from repo.features.languages.extrusion_styles import ExtrusionStyleFactory
+
 from ...core.request import BioRequest
 from .layout import build_layout
 
 
 THEME_COLORS: Dict[str, Dict[str, str]] = {
     "light": {
-        "bg": "transparent",
         "text": "#111111",
         "border": "#111111",
     },
     "dark": {
-        "bg": "transparent",
         "text": "#f0f6fc",
         "border": "#f0f6fc",
     },
@@ -51,43 +51,30 @@ def render_svg(request: BioRequest, theme: str) -> str:
         "    }",
         "  </style>",
         "",
-        "  <g id=\"boxes\">",
-        (
-            f'    <rect x="{layout.box_x + layout.shadow_offset}" '
-            f'y="{layout.box_y + layout.shadow_offset}" '
-            f'width="{layout.box_width}" height="{layout.box_height}" '
-            f'fill="none" stroke="{colors["border"]}" stroke-width="2" />'
-        ),
-        (
-            f'    <rect x="{layout.box_x}" y="{layout.box_y}" width="{layout.box_width}" '
-            f'height="{layout.box_height}" fill="{colors["bg"]}" stroke="{colors["border"]}" stroke-width="2" />'
-        ),
-        # Connect front/back boxes to preserve the continuous pseudo-3D border look.
-        (
-            f'    <line x1="{layout.box_x + layout.box_width}" y1="{layout.box_y}" '
-            f'x2="{layout.box_x + layout.box_width + layout.shadow_offset}" y2="{layout.box_y}" '
-            f'stroke="{colors["border"]}" stroke-width="2" />'
-        ),
-        (
-            f'    <line x1="{layout.box_x + layout.box_width + layout.shadow_offset}" y1="{layout.box_y}" '
-            f'x2="{layout.box_x + layout.box_width + layout.shadow_offset}" y2="{layout.box_y + layout.shadow_offset}" '
-            f'stroke="{colors["border"]}" stroke-width="2" />'
-        ),
-        (
-            f'    <line x1="{layout.box_x}" y1="{layout.box_y + layout.box_height}" '
-            f'x2="{layout.box_x}" y2="{layout.box_y + layout.box_height + layout.shadow_offset}" '
-            f'stroke="{colors["border"]}" stroke-width="2" />'
-        ),
-        (
-            f'    <line x1="{layout.box_x}" y1="{layout.box_y + layout.box_height + layout.shadow_offset}" '
-            f'x2="{layout.box_x + layout.shadow_offset}" y2="{layout.box_y + layout.box_height + layout.shadow_offset}" '
-            f'stroke="{colors["border"]}" stroke-width="2" />'
-        ),
-        "  </g>",
-        "",
-        "  <g id=\"content\">",
-        f'    <text x="{layout.title_x}" y="{layout.title_y}" class="bio-text">{_escape_xml(request.title)}</text>',
+        '  <g id="boxes">',
     ]
+
+    extrusion = ExtrusionStyleFactory.create(style_number=1, stroke_width=2, corner_radius=0)
+    border_elements = extrusion.render(
+        layout.box_x,
+        layout.box_y,
+        layout.box_width,
+        layout.box_height,
+        layout.shadow_offset,
+        layout.shadow_offset,
+        colors["border"],
+    )
+    for element in border_elements:
+        parts.append(f"    {element}")
+
+    parts.extend(
+        [
+            "  </g>",
+            "",
+            '  <g id="content">',
+            f'    <text x="{layout.title_x}" y="{layout.title_y}" class="bio-text">{_escape_xml(request.title)}</text>',
+        ]
+    )
 
     for row_layout in layout.rows:
         row_text = row_layout.text

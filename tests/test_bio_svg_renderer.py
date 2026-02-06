@@ -21,7 +21,8 @@ def test_svg_renderer_emits_deterministic_structure() -> None:
     assert svg.startswith("<svg ")
     assert "id=\"boxes\"" in svg
     assert "id=\"content\"" in svg
-    assert svg.count("<rect ") == 2
+    assert svg.count("<rect ") == 1
+    assert svg.count("<line ") >= 4
     assert svg.count("class=\"bio-text\"") >= 1
     assert "isaac" in svg
     assert "age" in svg
@@ -31,7 +32,7 @@ def test_svg_renderer_emits_deterministic_structure() -> None:
 def test_svg_renderer_uses_theme_palette() -> None:
     light_svg = render_svg(_request(), "light")
     dark_svg = render_svg(_request(), "dark")
-    assert 'fill="transparent"' in light_svg
-    assert 'fill="transparent"' in dark_svg
+    assert 'fill="none"' in light_svg
+    assert 'fill="none"' in dark_svg
     assert "#111111" in light_svg
     assert "#f0f6fc" in dark_svg
