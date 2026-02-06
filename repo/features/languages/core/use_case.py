@@ -18,6 +18,9 @@ WriteTextFile = Callable[[str, str], None]
 UpdateReadmeSection = Callable[[str, str, str, str], None]
 Logger = Callable[[str], None]
 
+SVG_LIGHT_FILE = "langs-mono-light.svg"
+SVG_DARK_FILE = "langs-mono-dark.svg"
+
 
 def _apply_filters(
     stats: StatsCollection,
@@ -63,5 +66,28 @@ def execute_languages(
     for stat in filtered_stats:
         logger(f"  {stat.name}: {stat.percentage:.1f}%")
 
-    _ = (render_text_lines, render_svg, write_text_file, update_readme_section)
-    raise NotImplementedError("execute_languages is implemented incrementally")
+    if request.effective_output_mode == "vector":
+        logger("\nVector mode selected. Generating SVG assets...")
+        light_svg = render_svg(filtered_stats, "light")
+        dark_svg = render_svg(filtered_stats, "dark")
+        write_text_file(SVG_LIGHT_FILE, light_svg)
+        write_text_file(SVG_DARK_FILE, dark_svg)
+        logger(f"✓ Saved {SVG_LIGHT_FILE}")
+        logger(f"✓ Saved {SVG_DARK_FILE}")
+
+        snippet = (
+            "<picture>\n"
+            '  <source media="(prefers-color-scheme: dark)" srcset="langs-mono-dark.svg">\n'
+            '  <source media="(prefers-color-scheme: light)" srcset="langs-mono-light.svg">\n'
+            '  <img alt="Language Statistics" src="langs-mono-light.svg">\n'
+            "</picture>"
+        )
+        logger("\nAdd the following snippet to your README:\n")
+        logger(snippet)
+        return FeatureResult(
+            assets=[SVG_LIGHT_FILE, SVG_DARK_FILE],
+            summary="Generated langs-mono SVG assets.",
+        )
+
+    _ = (render_text_lines, update_readme_section)
+    raise NotImplementedError("text mode is implemented incrementally")
