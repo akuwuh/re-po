@@ -61,6 +61,27 @@ def render_svg(request: BioRequest, theme: str) -> str:
             f'    <rect x="{layout.box_x}" y="{layout.box_y}" width="{layout.box_width}" '
             f'height="{layout.box_height}" fill="{colors["bg"]}" stroke="{colors["border"]}" stroke-width="3" />'
         ),
+        # Connect front/back boxes to preserve the continuous pseudo-3D border look.
+        (
+            f'    <line x1="{layout.box_x + layout.box_width}" y1="{layout.box_y}" '
+            f'x2="{layout.box_x + layout.box_width + layout.shadow_offset}" y2="{layout.box_y}" '
+            f'stroke="{colors["border"]}" stroke-width="3" />'
+        ),
+        (
+            f'    <line x1="{layout.box_x + layout.box_width + layout.shadow_offset}" y1="{layout.box_y}" '
+            f'x2="{layout.box_x + layout.box_width + layout.shadow_offset}" y2="{layout.box_y + layout.shadow_offset}" '
+            f'stroke="{colors["border"]}" stroke-width="3" />'
+        ),
+        (
+            f'    <line x1="{layout.box_x}" y1="{layout.box_y + layout.box_height}" '
+            f'x2="{layout.box_x}" y2="{layout.box_y + layout.box_height + layout.shadow_offset}" '
+            f'stroke="{colors["border"]}" stroke-width="3" />'
+        ),
+        (
+            f'    <line x1="{layout.box_x}" y1="{layout.box_y + layout.box_height + layout.shadow_offset}" '
+            f'x2="{layout.box_x + layout.shadow_offset}" y2="{layout.box_y + layout.box_height + layout.shadow_offset}" '
+            f'stroke="{colors["border"]}" stroke-width="3" />'
+        ),
         "  </g>",
         "",
         "  <g id=\"content\">",
@@ -69,7 +90,7 @@ def render_svg(request: BioRequest, theme: str) -> str:
 
     for row_layout in layout.rows:
         row = row_layout.row
-        branch = "└" if row_layout.is_last else "├"
+        branch = "└─" if row_layout.is_last else "├─"
         value_raw = f"{row.prefix}{row.value}"
         if row.align == "right":
             value_text = value_raw.rjust(layout.value_width_chars)
@@ -77,6 +98,9 @@ def render_svg(request: BioRequest, theme: str) -> str:
             value_text = value_raw.ljust(layout.value_width_chars)
         value_x = layout.value_x + ((row.pad - 1) * layout.char_width)
 
+        parts.append(
+            f'    <text x="{layout.label_x - (3 * layout.char_width)}" y="{row_layout.y}" class="bio-text">│</text>'
+        )
         parts.append(
             f'    <text x="{layout.label_x - (2 * layout.char_width)}" y="{row_layout.y}" class="bio-text">{branch}</text>'
         )
