@@ -38,6 +38,12 @@ def _apply_filters(
     return filtered
 
 
+def _lines_to_html(lines: List[str]) -> str:
+    html_lines = [line.replace(" ", "&nbsp;") for line in lines]
+    stats_html = "<br>\n".join(html_lines)
+    return f"<div align=\"center\">\n<samp>\n{stats_html}\n</samp>\n</div>"
+
+
 def execute_languages(
     request: LanguagesRequest,
     *,
@@ -89,5 +95,22 @@ def execute_languages(
             summary="Generated langs-mono SVG assets.",
         )
 
-    _ = (render_text_lines, update_readme_section)
-    raise NotImplementedError("text mode is implemented incrementally")
+    if request.output_mode not in ("text", ""):
+        logger(f"Warning: Unknown output_mode '{request.output_mode}', defaulting to text.")
+
+    logger("\nText mode selected. Rendering README snippet...")
+    text_lines = render_text_lines(filtered_stats)
+    html_block = _lines_to_html(text_lines)
+    update_readme_section(
+        html_block,
+        request.readme_path,
+        request.start_marker,
+        request.end_marker,
+    )
+    logger(f"✓ Updated {request.readme_path}")
+    return FeatureResult(
+        html_block=html_block,
+        start_marker=request.start_marker,
+        end_marker=request.end_marker,
+        summary="Updated README section.",
+    )
