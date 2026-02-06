@@ -146,4 +146,31 @@ runs:
           fi
         fi
 
+        if [ "${{ inputs.card }}" = "bio" ]; then
+          if [ -n "${{ inputs.bio_output_mode }}" ]; then
+            ARGS+=("--option" "output_mode=${{ inputs.bio_output_mode }}")
+          fi
+          if [ -n "${{ inputs.bio_rows }}" ]; then
+            ARGS+=("--option" "rows=${{ inputs.bio_rows }}")
+          fi
+          if [ -n "${{ inputs.bio_title }}" ]; then
+            ARGS+=("--option" "title=${{ inputs.bio_title }}")
+          fi
+          if [ -n "${{ inputs.bio_update_readme }}" ]; then
+            ARGS+=("--option" "update_readme=${{ inputs.bio_update_readme }}")
+          fi
+          if [ -n "${{ inputs.bio_start_marker }}" ]; then
+            ARGS+=("--option" "start_marker=${{ inputs.bio_start_marker }}")
+          fi
+          if [ -n "${{ inputs.bio_end_marker }}" ]; then
+            ARGS+=("--option" "end_marker=${{ inputs.bio_end_marker }}")
+          fi
+          if [ -n "${{ inputs.bio_svg_light_file }}" ]; then
+            ARGS+=("--option" "svg_light_file=${{ inputs.bio_svg_light_file }}")
+          fi
+          if [ -n "${{ inputs.bio_svg_dark_file }}" ]; then
+            ARGS+=("--option" "svg_dark_file=${{ inputs.bio_svg_dark_file }}")
+          fi
+        fi
+
         python -m repo.core.runner "${ARGS[@]}"
