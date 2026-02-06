@@ -17,6 +17,12 @@ UpdateReadmeSection = Callable[[str, str, str, str], None]
 Logger = Callable[[str], None]
 
 
+def _lines_to_html(lines: List[str]) -> str:
+    html_lines = [line.replace(" ", "&nbsp;") for line in lines]
+    body = "<br>\n".join(html_lines)
+    return f"<div align=\"center\">\n<samp>\n{body}\n</samp>\n</div>"
+
+
 def execute_bio(
     request: BioRequest,
     *,
@@ -58,5 +64,23 @@ def execute_bio(
             summary="Generated bio SVG assets.",
         )
 
-    _ = (render_text_lines,)
-    raise NotImplementedError("text mode is implemented incrementally")
+    logger("Text mode selected. Rendering bio snippet...")
+    text_lines = render_text_lines(request)
+    html_block = _lines_to_html(text_lines)
+    if request.update_readme:
+        update_readme_section(
+            html_block,
+            request.readme_path,
+            request.start_marker,
+            request.end_marker,
+        )
+        logger(f"✓ Updated {request.readme_path}")
+    else:
+        logger("Skipping README update (update_readme=false).")
+
+    return FeatureResult(
+        html_block=html_block,
+        start_marker=request.start_marker,
+        end_marker=request.end_marker,
+        summary="Rendered bio text card.",
+    )
