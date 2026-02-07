@@ -10,15 +10,13 @@ from repo.core.readme_updater import update_section
 
 from .core import LanguageStatsService, LanguagesRequest, RenderConfig
 from .core.parsing import parse_float, parse_int, parse_list
+from .core.request import DEFAULT_END_MARKER, DEFAULT_OUTPUT_MODE, DEFAULT_START_MARKER
 from .core.use_case import execute_languages
 from .domain import StatsCollection
 from .rendering.svg import SVGRenderer
 from .rendering.text import TextRenderer
 
 DEFAULT_EXCLUDED_LANGUAGES = ['JavaScript', 'HTML', 'CSS', 'SCSS']
-DEFAULT_OUTPUT_MODE = 'text'
-DEFAULT_START_MARKER = '<!--START_SECTION:languages-->'
-DEFAULT_END_MARKER = '<!--END_SECTION:languages-->'
 
 def _merge_exclusions(excluded: List[str], extra: List[str]) -> tuple[str, ...]:
     base = excluded or list(DEFAULT_EXCLUDED_LANGUAGES)
