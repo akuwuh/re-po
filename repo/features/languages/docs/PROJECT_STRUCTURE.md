@@ -37,7 +37,7 @@ repo/features/languages/                          # Main package
 │   ├── text_utils.py                # Text processing
 │   └── file_utils.py                # File operations
 │
-├── extrusion_styles/                # 🎲 PLUGGABLE STRATEGIES
+├── repo/core/shared/extrusion/                # 🎲 PLUGGABLE STRATEGIES
 │   ├── __init__.py                  # Strategy implementations
 │   ├── base.py                      # ExtrusionStyle ABC
 │   ├── style1_back_box.py           # Back box style
@@ -170,7 +170,7 @@ repo/features/languages/                          # Main package
 - ❌ No layer-specific logic
 - ❌ No state management
 
-### 🎲 Extrusion Styles (`extrusion_styles/`)
+### 🎲 Extrusion Styles (`repo/core/shared/extrusion/`)
 
 **Purpose**: Pluggable 3D rendering strategies
 
@@ -284,7 +284,7 @@ svg = renderer.render(stats)
 ### Custom Extrusion Style
 
 ```python
-from repo.features.languages.extrusion_styles import ExtrusionStyle, ExtrusionStyleFactory
+from repo.core.shared.extrusion import ExtrusionStyle, ExtrusionStyleFactory
 
 # Define custom style
 class IsometricExtrusion(ExtrusionStyle):
@@ -312,7 +312,7 @@ tests/
 ├── infrastructure/         # Test API clients (mocked)
 ├── rendering/              # Test renderers
 ├── core/                   # Test services
-└── extrusion_styles/       # Test styles
+└── repo/core/shared/extrusion/       # Test styles
 ```
 
 ### Integration Tests

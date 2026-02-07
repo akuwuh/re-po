@@ -28,7 +28,7 @@ repo/features/languages/
 repo/features/languages/
 ├── rendering/svg/renderer.py  (332 lines - simplified)
 │   └── draw_3d_box_borders() (delegates to factory)
-└── extrusion_styles/
+└── repo/core/shared/extrusion/
     ├── __init__.py              # Public API
     ├── base.py                  # Abstract base class
     ├── style1_back_box.py       # Style 1 implementation
@@ -84,7 +84,7 @@ svg = generate_language_stats_svg(lang_stats, theme='light')
 You can now use the extrusion styles directly:
 
 ```python
-from repo.features.languages.extrusion_styles import ExtrusionStyleFactory
+from repo.core.shared.extrusion import ExtrusionStyleFactory
 
 # Create any style
 style = ExtrusionStyleFactory.create(1, stroke_width=2)
@@ -124,7 +124,7 @@ All tests pass:
 
 ### 1. Create Style Class
 ```python
-# extrusion_styles/style3_isometric.py
+# repo/core/shared/extrusion/style3_isometric.py
 from .base import ExtrusionStyle
 
 class IsometricExtrusion(ExtrusionStyle):
@@ -138,7 +138,7 @@ class IsometricExtrusion(ExtrusionStyle):
 
 ### 2. Register in Factory
 ```python
-# extrusion_styles/factory.py
+# repo/core/shared/extrusion/factory.py
 _styles = {
     1: BackBoxExtrusion,
     2: ConnectedExtrusion,
@@ -148,7 +148,7 @@ _styles = {
 
 ### 3. Export from Module
 ```python
-# extrusion_styles/__init__.py
+# repo/core/shared/extrusion/__init__.py
 from .style3_isometric import IsometricExtrusion
 
 __all__ = [..., 'IsometricExtrusion']
@@ -184,7 +184,7 @@ EXTRUSION_STYLE = 3  # ← Change config
 
 ## Migration Checklist
 
-- ✅ Created `extrusion_styles/` module structure
+- ✅ Created `repo/core/shared/extrusion/` module structure
 - ✅ Implemented `ExtrusionStyle` base class
 - ✅ Migrated Style 1 to `BackBoxExtrusion`
 - ✅ Migrated Style 2 to `ConnectedExtrusion`
@@ -219,7 +219,7 @@ EXTRUSION_STYLE = 3  # ← Change config
 ## Documentation
 
 New documentation added:
-- `extrusion_styles/README.md` - Style usage guide
+- `repo/core/shared/extrusion/README.md` - Style usage guide
 - `ARCHITECTURE.md` - Overall architecture
 - `REFACTORING_SUMMARY.md` - This document
 

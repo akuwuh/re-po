@@ -29,7 +29,7 @@ repo/features/languages/
 ├── rendering/           # Visualization engines
 ├── core/                # Application services
 ├── utils/               # Shared utilities
-└── extrusion_styles/    # Pluggable strategies
+└── repo/core/shared/extrusion/    # Pluggable strategies
 ```
 
 ### Dependency Flow
@@ -309,7 +309,7 @@ pytest tests/integration/
 1. **PROJECT_STRUCTURE.md** - Project organization
 2. **ARCHITECTURE.md** - Architecture details
 3. **REFACTORING_SUMMARY.md** - Previous refactoring
-4. **extrusion_styles/README.md** - Style documentation
+4. **repo/core/shared/extrusion/README.md** - Style documentation
 5. **This file** - Complete refactoring summary
 
 ## 🎯 Design Principles Applied

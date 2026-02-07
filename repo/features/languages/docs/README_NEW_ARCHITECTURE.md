@@ -49,7 +49,7 @@ repo/features/languages/                           Professional Python Package
 │   ├── text_utils.py                 ↳ Text processing
 │   └── file_utils.py                 ↳ File operations
 │
-└── 🎲 extrusion_styles/              PLUGGABLE STRATEGIES
+└── 🎲 repo/core/shared/extrusion/              PLUGGABLE STRATEGIES
     ├── base.py                       ↳ Strategy interface
     ├── style1_back_box.py            ↳ Back box style
     ├── style2_connected.py           ↳ Connected style
@@ -139,7 +139,7 @@ svg = renderer.render(stats)
 ### Example 4: Custom Extrusion Style
 
 ```python
-from repo.features.languages.extrusion_styles import ExtrusionStyle, ExtrusionStyleFactory
+from repo.core.shared.extrusion import ExtrusionStyle, ExtrusionStyleFactory
 
 # Define custom style
 class MyCustomStyle(ExtrusionStyle):
@@ -255,7 +255,7 @@ pip install -r requirements.txt
 - **PROJECT_STRUCTURE.md** - Detailed structure guide
 - **ARCHITECTURE.md** - Architecture documentation
 - **COMPLETE_REFACTORING.md** - Refactoring summary
-- **extrusion_styles/README.md** - Style guide
+- **repo/core/shared/extrusion/README.md** - Style guide
 - **This file** - Quick start guide
 
 ## 🔄 Migration from 2.x
@@ -290,7 +290,7 @@ svg = service.generate_svg(config=config)
 ### Adding New Features
 
 1. **New Renderer**: Add to `rendering/`
-2. **New Style**: Add to `extrusion_styles/`
+2. **New Style**: Add to `repo/core/shared/extrusion/`
 3. **New Domain Entity**: Add to `domain/`
 4. **New Data Source**: Add to `infrastructure/`
 

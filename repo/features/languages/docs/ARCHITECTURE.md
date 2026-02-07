@@ -19,7 +19,7 @@ repo/features/languages/
 ├── html_converter.py              # HTML conversion utilities
 ├── box_drawer.py                  # Text-based box drawing
 ├── readme_updater.py              # README file updating
-└── extrusion_styles/              # 3D extrusion rendering (new)
+└── repo/core/shared/extrusion/              # 3D extrusion rendering (new)
     ├── __init__.py                # Style exports
     ├── base.py                    # Abstract base class
     ├── style1_back_box.py         # Style 1 implementation
@@ -41,7 +41,7 @@ repo/features/languages/
    - Responsibility: Format data for display
    - Domain entities: Progress bars, percentages, text layout
 
-3. **Rendering Context** (`rendering/svg/renderer.py`, `extrusion_styles/`)
+3. **Rendering Context** (`rendering/svg/renderer.py`, `repo/core/shared/extrusion/`)
    - Responsibility: Generate visual representations
    - Domain entities: SVG elements, 3D boxes, extrusion styles
    - **Key abstraction**: `ExtrusionStyle` strategy pattern
@@ -155,7 +155,7 @@ Configuration is centralized in `config.py` and `rendering/svg/renderer.py`:
 
 1. **Create new style class:**
    ```python
-   # extrusion_styles/style3_isometric.py
+   # repo/core/shared/extrusion/style3_isometric.py
    from .base import ExtrusionStyle
    
    class IsometricExtrusion(ExtrusionStyle):
@@ -168,13 +168,13 @@ Configuration is centralized in `config.py` and `rendering/svg/renderer.py`:
 
 2. **Register in factory:**
    ```python
-   # In extrusion_styles/__init__.py
+   # In repo/core/shared/extrusion/__init__.py
    from .style3_isometric import IsometricExtrusion
    ```
 
 3. **Update factory registry:**
    ```python
-   # extrusion_styles/factory.py
+   # repo/core/shared/extrusion/factory.py
    _styles = {
        1: BackBoxExtrusion,
        2: ConnectedExtrusion,
@@ -242,7 +242,7 @@ paths = draw_3d_box_borders(x, y, w, h, ex, ey, sw, color, style=1)
 **After:**
 ```python
 # Styles are modular and extensible
-from extrusion_styles import ExtrusionStyleFactory
+from repo.core.shared.extrusion import ExtrusionStyleFactory
 
 style = ExtrusionStyleFactory.create(1, stroke_width=2)
 paths = style.render(x, y, w, h, ex, ey, color)

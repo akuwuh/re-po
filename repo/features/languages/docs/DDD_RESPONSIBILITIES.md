@@ -35,7 +35,7 @@ repo/features/languages/                        📦 MAIN PACKAGE
 │   ├── text_utils.py              ↳ Text processing
 │   └── file_utils.py              ↳ File operations
 │
-├── 🎲 extrusion_styles/           RENDERING STRATEGIES
+├── 🎲 repo/core/shared/extrusion/           RENDERING STRATEGIES
 │   ├── __init__.py
 │   ├── base.py                    ↳ Strategy interface
 │   ├── style1_back_box.py         ↳ Back box strategy
@@ -255,7 +255,7 @@ def escape_xml(text: str) -> str:
 
 ---
 
-### 🎲 EXTRUSION STYLES (`extrusion_styles/`)
+### 🎲 EXTRUSION STYLES (`repo/core/shared/extrusion/`)
 
 **What It Does**: Pluggable 3D rendering strategies
 
@@ -279,7 +279,7 @@ def escape_xml(text: str) -> str:
 
 **Example**:
 ```python
-# extrusion_styles/style1_back_box.py
+# repo/core/shared/extrusion/style1_back_box.py
 class BackBoxExtrusion(ExtrusionStyle):
     """Strategy for back box style"""
     
@@ -328,7 +328,7 @@ USER REQUEST
          │              (Pure business objects)
          │
          └──→ rendering/svg/renderer.py
-              ├──→ extrusion_styles/factory.py
+              ├──→ repo/core/shared/extrusion/factory.py
               │    └──→ style1 or style2
               │
               ├──→ rendering/svg/patterns.py
@@ -436,7 +436,7 @@ result = renderer.render(test_stats)  # No API calls!
 | **rendering/** | ❌ | ❌ | ✅ | ❌ | ❌ |
 | **core/** | ❌ | ❌ | ❌ | ❌ | ✅ |
 | **utils/** | ❌ | ❌ | ❌ | Maybe | ❌ |
-| **extrusion_styles/** | ❌ | ❌ | ✅ | ❌ | ❌ |
+| **repo/core/shared/extrusion/** | ❌ | ❌ | ✅ | ❌ | ❌ |
 
 ---
 
@@ -449,7 +449,7 @@ result = renderer.render(test_stats)  # No API calls!
 3. **rendering/** = Make things visible (SVG, text)
 4. **core/** = Coordinate everything (orchestration)
 5. **utils/** = Helper functions (pure utilities)
-6. **extrusion_styles/** = Pluggable strategies (rendering styles)
+6. **repo/core/shared/extrusion/** = Pluggable strategies (rendering styles)
 7. **legacy/** = Old code (deprecated)
 
 ### Golden Rules:
