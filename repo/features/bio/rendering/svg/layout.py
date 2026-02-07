@@ -77,6 +77,7 @@ def build_layout(request: BioRequest, config: BioLayoutConfig | None = None) -> 
     title_text = text_lines[0]
     row_text_lines = text_lines[1:]
     max_line_chars = max(len(line) for line in text_lines)
+    row_count = len(text_lines)
 
     title_x = active_config.box_x + active_config.padding_x
     title_y = active_config.box_y + active_config.padding_y + active_config.line_height
@@ -95,11 +96,10 @@ def build_layout(request: BioRequest, config: BioLayoutConfig | None = None) -> 
             )
         )
 
-    content_width = (max_line_chars + active_config.content_right_gutter_chars) * active_config.char_width
+    required_content_chars = max_line_chars + active_config.content_right_gutter_chars
+    content_width = required_content_chars * active_config.char_width
     box_width = max(content_width + (active_config.padding_x * 2), active_config.min_box_width)
-    box_height = (active_config.padding_y * 2) + (
-        active_config.line_height * (len(request.rows) + 1)
-    )
+    box_height = (active_config.padding_y * 2) + (active_config.line_height * row_count)
 
     svg_width = box_width + active_config.shadow_offset + 40.0
     svg_height = box_height + active_config.shadow_offset + 40.0
