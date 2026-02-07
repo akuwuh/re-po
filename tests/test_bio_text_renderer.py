@@ -24,10 +24,10 @@ def test_text_renderer_preserves_row_order() -> None:
     )
 
     lines = render_text_lines(request)
-    assert lines[0] == "isaac"
-    assert lines[1].startswith("├ age")
-    assert lines[2].startswith("├ location")
-    assert lines[3].startswith("└ learning")
+    assert lines[0].startswith("  │  isaac")
+    assert lines[1].startswith("  │  ├─ age")
+    assert lines[2].startswith("  │  ├─ location")
+    assert lines[3].startswith("  │  └─ learning")
 
 
 def test_text_renderer_applies_alignment_padding_and_prefix() -> None:
