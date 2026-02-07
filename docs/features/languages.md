@@ -29,6 +29,14 @@ updates a README snippet (text mode) or renders two SVG assets
 - README section replaced between the configured markers (text mode).
 - Console log summarising the files that changed.
 
+## Internal Architecture Notes
+
+- `domain/` and `infrastructure/` remain languages-specific bounded contexts.
+- Shared rendering primitives (extrusion styles, XML escaping, snippet helpers)
+  are consumed from `repo/core/shared/`.
+- The feature runner path is `repo/features/languages/generate_languages.py`,
+  which maps inputs into `LanguagesRequest` and executes the use case.
+
 ## Workflow Examples
 
 ### Using the GitHub Action (recommended)
@@ -77,5 +85,4 @@ Add the following snippet to your README when using vector mode:
   <img alt="Language Statistics" src="langs-mono-light.svg">
 </picture>
 ```
-
 
