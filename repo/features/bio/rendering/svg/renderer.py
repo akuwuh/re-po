@@ -6,8 +6,8 @@ from __future__ import annotations
 
 from typing import Dict
 
+from repo.core.shared.extrusion import ExtrusionStyleFactory
 from repo.core.shared.svg import escape_xml
-from repo.features.languages.extrusion_styles import ExtrusionStyleFactory
 
 from ...core.request import BioRequest
 from .layout import build_layout
