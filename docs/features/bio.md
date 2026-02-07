@@ -5,6 +5,12 @@ either:
 - dual-theme SVG files (`bio-card-light.svg`, `bio-card-dark.svg`), or
 - a text/HTML snippet inserted between README markers.
 
+Shared-kernel dependencies used by bio:
+- `repo/core/shared/svg.py` for XML escaping
+- `repo/core/shared/snippets.py` for `<picture>` block generation
+- `repo/core/shared/markup.py` for monospace HTML wrapping
+- `repo/core/shared/extrusion/` for box border styles
+
 ## Inputs
 
 | Input | Description | Default |
