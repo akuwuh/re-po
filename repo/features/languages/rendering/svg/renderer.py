@@ -5,7 +5,7 @@ Main SVG renderer orchestrator
 from typing import List
 from ...domain import StatsCollection
 from ...core.config import RenderConfig
-from ...extrusion_styles import ExtrusionStyleFactory
+from repo.core.shared.extrusion import ExtrusionStyleFactory
 from ...utils import escape_xml
 from .patterns import CheckeredPatternGenerator
 
