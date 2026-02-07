@@ -32,9 +32,6 @@ from .domain import LanguageStat, StatsCollection
 # Rendering engines
 from .rendering import SVGRenderer, TextRenderer
 
-# Extrusion styles (for customization)
-from . import extrusion_styles
-
 # Legacy compatibility (backward compatible)
 # Note: Legacy imports disabled to avoid circular dependencies
 # If you need old API, import directly from legacy module:
@@ -53,8 +50,5 @@ __all__ = [
     # Renderers
     'SVGRenderer',
     'TextRenderer',
-    
-    # Extrusion styles
-    'extrusion_styles',
     
 ]
