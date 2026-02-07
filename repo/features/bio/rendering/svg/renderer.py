@@ -34,9 +34,15 @@ def render_svg(request: BioRequest, theme: str) -> str:
         "      font-family: 'Courier New', Courier, monospace;",
         f"      font-size: {layout.font_size}px;",
         f'      fill: {colors["text"]};',
-        "      font-weight: 500;",
+        "      font-weight: 400;",
         "      white-space: pre;",
         "      dominant-baseline: middle;",
+        "    }",
+        "    .bio-guides {",
+        f'      stroke: {colors["text"]};',
+        "      stroke-width: 2;",
+        "      fill: none;",
+        "      shape-rendering: crispEdges;",
         "    }",
         "  </style>",
         "",
@@ -61,14 +67,25 @@ def render_svg(request: BioRequest, theme: str) -> str:
             "  </g>",
             "",
             '  <g id="content">',
+            f'    <line x1="{layout.guide_x}" y1="{layout.trunk_top_y}" x2="{layout.guide_x}" y2="{layout.trunk_bottom_y}" class="bio-guides" />',
             f'    <text x="{layout.title_x}" y="{layout.title_y}" class="bio-text">{escape_xml(layout.title_text)}</text>',
         ]
     )
 
     for row_layout in layout.rows:
-        row_text = row_layout.text
+        branch_y1 = row_layout.y - (layout.line_height * 0.22)
+        branch_y2 = row_layout.y if row_layout.is_last else row_layout.y + (layout.line_height * 0.22)
         parts.append(
-            f'    <text x="{layout.rows_x}" y="{row_layout.y}" class="bio-text">{escape_xml(row_text)}</text>'
+            f'    <line x1="{layout.branch_x}" y1="{row_layout.y}" x2="{layout.branch_end_x}" y2="{row_layout.y}" class="bio-guides" />'
+        )
+        parts.append(
+            f'    <line x1="{layout.branch_x}" y1="{branch_y1}" x2="{layout.branch_x}" y2="{branch_y2}" class="bio-guides" />'
+        )
+        parts.append(
+            f'    <text x="{layout.label_x}" y="{row_layout.y}" class="bio-text">{escape_xml(row_layout.label_text)}</text>'
+        )
+        parts.append(
+            f'    <text x="{row_layout.value_x}" y="{row_layout.y}" class="bio-text">{escape_xml(row_layout.value_text)}</text>'
         )
 
     parts.extend(["  </g>", "</svg>"])

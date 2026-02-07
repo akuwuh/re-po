@@ -8,13 +8,14 @@ from dataclasses import dataclass
 from typing import Tuple
 
 from ...core.request import BioRequest, BioRow
-from ..text import render_text_lines
 
 
 @dataclass(frozen=True)
 class RowLayout:
     row: BioRow
-    text: str
+    label_text: str
+    value_text: str
+    value_x: float
     y: float
     is_last: bool
 
@@ -31,6 +32,10 @@ class BioLayoutConfig:
     padding_y: float = 18.0
     content_right_gutter_chars: int = 6
     min_box_width: float = 280.0
+    left_margin_chars: int = 2
+    guide_to_branch_chars: int = 3
+    branch_chars: int = 2
+    label_gap_chars: int = 1
 
     def __post_init__(self) -> None:
         if self.font_size <= 0:
@@ -45,6 +50,14 @@ class BioLayoutConfig:
             raise ValueError("content_right_gutter_chars must be non-negative")
         if self.min_box_width <= 0:
             raise ValueError("min_box_width must be positive")
+        if self.left_margin_chars < 0:
+            raise ValueError("left_margin_chars must be non-negative")
+        if self.guide_to_branch_chars < 0:
+            raise ValueError("guide_to_branch_chars must be non-negative")
+        if self.branch_chars <= 0:
+            raise ValueError("branch_chars must be positive")
+        if self.label_gap_chars < 0:
+            raise ValueError("label_gap_chars must be non-negative")
 
 
 @dataclass(frozen=True)
@@ -52,7 +65,12 @@ class BioLayout:
     title_text: str
     title_x: float
     title_y: float
-    rows_x: float
+    guide_x: float
+    branch_x: float
+    branch_end_x: float
+    label_x: float
+    trunk_top_y: float
+    trunk_bottom_y: float
     box_x: float
     box_y: float
     box_width: float
@@ -73,42 +91,59 @@ def build_layout(request: BioRequest, config: BioLayoutConfig | None = None) -> 
     label_width_chars = max(len(row.label) for row in request.rows)
     value_width_chars = max(len(f"{row.prefix}{row.value}") for row in request.rows)
 
-    text_lines = render_text_lines(request)
-    title_text = text_lines[0]
-    row_text_lines = text_lines[1:]
-    max_line_chars = max(len(line) for line in text_lines)
-    row_count = len(text_lines)
-
-    title_x = active_config.box_x + active_config.padding_x
+    base_x = active_config.box_x + active_config.padding_x
+    guide_x = base_x + (active_config.left_margin_chars * active_config.char_width)
+    branch_x = guide_x + (active_config.guide_to_branch_chars * active_config.char_width)
+    label_x = branch_x + (
+        (active_config.branch_chars + active_config.label_gap_chars) * active_config.char_width
+    )
+    title_x = branch_x
     title_y = active_config.box_y + active_config.padding_y + active_config.line_height
-    rows_x = title_x
+    row_count = len(request.rows) + 1
 
     row_layouts = []
+    max_right = title_x + (len(request.title) * active_config.char_width)
     for index, row in enumerate(request.rows):
         is_last = index == len(request.rows) - 1
-        row_text = row_text_lines[index]
+        value_raw = f"{row.prefix}{row.value}"
+        if row.align == "right":
+            value_text = value_raw.rjust(value_width_chars)
+        else:
+            value_text = value_raw.ljust(value_width_chars)
+        value_x = label_x + ((label_width_chars + row.pad) * active_config.char_width)
+        row_right = value_x + (len(value_text) * active_config.char_width)
+        max_right = max(max_right, row_right)
         row_layouts.append(
             RowLayout(
                 row=row,
-                text=row_text,
+                label_text=row.label,
+                value_text=value_text,
+                value_x=value_x,
                 y=title_y + active_config.line_height + (index * active_config.line_height),
                 is_last=is_last,
             )
         )
 
-    required_content_chars = max_line_chars + active_config.content_right_gutter_chars
-    content_width = required_content_chars * active_config.char_width
-    box_width = max(content_width + (active_config.padding_x * 2), active_config.min_box_width)
+    branch_end_x = label_x - (active_config.char_width * 0.5)
+    content_right = max_right + (active_config.content_right_gutter_chars * active_config.char_width)
+    box_width = max((content_right - active_config.box_x) + active_config.padding_x, active_config.min_box_width)
     box_height = (active_config.padding_y * 2) + (active_config.line_height * row_count)
+    trunk_top_y = title_y - (active_config.line_height * 0.45)
+    trunk_bottom_y = row_layouts[-1].y
 
     svg_width = box_width + active_config.shadow_offset + 40.0
     svg_height = box_height + active_config.shadow_offset + 40.0
 
     return BioLayout(
-        title_text=title_text,
+        title_text=request.title,
         title_x=title_x,
         title_y=title_y,
-        rows_x=rows_x,
+        guide_x=guide_x,
+        branch_x=branch_x,
+        branch_end_x=branch_end_x,
+        label_x=label_x,
+        trunk_top_y=trunk_top_y,
+        trunk_bottom_y=trunk_bottom_y,
         box_x=active_config.box_x,
         box_y=active_config.box_y,
         box_width=box_width,
