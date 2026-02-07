@@ -43,7 +43,8 @@ def test_layout_handles_right_align_and_max_pad() -> None:
     )
     layout = build_layout(request)
     assert len(layout.rows) == 2
-    assert all(row.text.startswith("  │  ") for row in layout.rows)
+    assert all(row.value_x > layout.label_x for row in layout.rows)
+    assert all(row.label_text in ("location", "age") for row in layout.rows)
 
 
 def test_layout_config_validation_rejects_invalid_values() -> None:
