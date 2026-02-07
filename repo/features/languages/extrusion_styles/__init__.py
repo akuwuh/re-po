@@ -1,7 +1,11 @@
-from .base import ExtrusionStyle
-from .factory import ExtrusionStyleFactory
-from .style1_back_box import BackBoxExtrusion
-from .style2_connected import ConnectedExtrusion
+"""Compatibility shim package for shared extrusion strategies."""
+
+from repo.core.shared.extrusion import (
+    BackBoxExtrusion,
+    ConnectedExtrusion,
+    ExtrusionStyle,
+    ExtrusionStyleFactory,
+)
 
 __all__ = [
     'ExtrusionStyle',
