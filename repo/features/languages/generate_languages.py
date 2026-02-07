@@ -8,11 +8,12 @@ from repo.core.file_utils import write_file
 from repo.core.feature_registry import FeatureConfig, FeatureResult, register_feature
 from repo.core.readme_updater import update_section
 
-from .core import LanguageStatsService, LanguagesRequest, RenderConfig
+from .core import LanguagesRequest, RenderConfig
 from .core.parsing import parse_float, parse_int, parse_list
 from .core.request import DEFAULT_END_MARKER, DEFAULT_OUTPUT_MODE, DEFAULT_START_MARKER
 from .core.use_case import execute_languages
 from .domain import StatsCollection
+from .infrastructure import GitHubClient
 from .rendering.svg import SVGRenderer
 from .rendering.text import TextRenderer
 
@@ -73,11 +74,11 @@ def _build_request_from_env() -> LanguagesRequest:
 
 
 def _run_job(request: LanguagesRequest) -> FeatureResult:
-    with LanguageStatsService(github_token=request.token, username=request.username) as service:
+    with GitHubClient(token=request.token, username=request.username) as github_client:
         text_renderer = TextRenderer()
 
         def _fetch_stats(username: str) -> StatsCollection:
-            return service.get_stats(username)
+            return github_client.fetch_language_stats(username)
 
         def _render_text_lines(stats: StatsCollection) -> List[str]:
             return text_renderer.render(stats)
