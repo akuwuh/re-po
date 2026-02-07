@@ -3,12 +3,13 @@ from __future__ import annotations
 import os
 import sys
 from pathlib import Path
-from typing import List, Optional
+from typing import List
 
 from repo.core.feature_registry import FeatureConfig, FeatureResult, register_feature
 from repo.core.readme_updater import update_section
 
 from .core import LanguageStatsService, LanguagesRequest, RenderConfig
+from .core.parsing import parse_float, parse_int, parse_list
 from .core.use_case import execute_languages
 from .domain import StatsCollection
 from .rendering.svg import SVGRenderer
@@ -18,39 +19,6 @@ DEFAULT_EXCLUDED_LANGUAGES = ['JavaScript', 'HTML', 'CSS', 'SCSS']
 DEFAULT_OUTPUT_MODE = 'text'
 DEFAULT_START_MARKER = '<!--START_SECTION:languages-->'
 DEFAULT_END_MARKER = '<!--END_SECTION:languages-->'
-
-
-def _parse_float(value: Optional[object]) -> Optional[float]:
-    if value in (None, ''):
-        return None
-    if isinstance(value, (int, float)):
-        return float(value)
-    try:
-        return float(str(value).strip())
-    except (ValueError, AttributeError):
-        print(f"Warning: Invalid float '{value}', ignoring.")
-        return None
-
-
-def _parse_int(value: Optional[object]) -> Optional[int]:
-    if value in (None, ''):
-        return None
-    if isinstance(value, (int, float)):
-        return int(value)
-    try:
-        return int(str(value).strip())
-    except (ValueError, AttributeError):
-        print(f"Warning: Invalid integer '{value}', ignoring.")
-        return None
-
-
-def _parse_list(value: Optional[object]) -> List[str]:
-    if value in (None, ''):
-        return []
-    if isinstance(value, list):
-        return [str(item).strip() for item in value if str(item).strip()]
-    return [item.strip() for item in str(value).split(',') if item.strip()]
-
 
 def _merge_exclusions(excluded: List[str], extra: List[str]) -> tuple[str, ...]:
     base = excluded or list(DEFAULT_EXCLUDED_LANGUAGES)
@@ -64,15 +32,15 @@ def _build_request_from_feature_config(config: FeatureConfig) -> LanguagesReques
         or config.actor
         or 'akuwuh'
     )
-    excluded = _parse_list(config.options.get('excluded_languages'))
-    extra = _parse_list(config.options.get('extra_excluded_languages'))
+    excluded = parse_list(config.options.get('excluded_languages'))
+    extra = parse_list(config.options.get('extra_excluded_languages'))
     return LanguagesRequest(
         token=config.token,
         username=username,
         output_mode=(config.options.get('output_mode') or DEFAULT_OUTPUT_MODE).lower(),
         excluded_languages=_merge_exclusions(excluded, extra),
-        min_percentage=_parse_float(config.options.get('min_percentage')),
-        max_languages=_parse_int(config.options.get('max_languages')),
+        min_percentage=parse_float(config.options.get('min_percentage')),
+        max_languages=parse_int(config.options.get('max_languages')),
         readme_path=config.options.get('readme_path') or config.readme_path,
         start_marker=config.options.get('start_marker') or DEFAULT_START_MARKER,
         end_marker=config.options.get('end_marker') or DEFAULT_END_MARKER,
@@ -91,15 +59,15 @@ def _build_request_from_env() -> LanguagesRequest:
         or 'akuwuh'
     )
     output_mode = (os.environ.get('OUTPUT_MODE') or DEFAULT_OUTPUT_MODE).strip().lower()
-    excluded = _parse_list(os.environ.get('LANG_STATS_EXCLUDED_LANGUAGES'))
-    extra = _parse_list(os.environ.get('LANG_STATS_EXTRA_EXCLUDED_LANGUAGES'))
+    excluded = parse_list(os.environ.get('LANG_STATS_EXCLUDED_LANGUAGES'))
+    extra = parse_list(os.environ.get('LANG_STATS_EXTRA_EXCLUDED_LANGUAGES'))
     return LanguagesRequest(
         token=token,
         username=username,
         output_mode=output_mode,
         excluded_languages=_merge_exclusions(excluded, extra),
-        min_percentage=_parse_float(os.environ.get('LANG_STATS_MIN_PERCENTAGE')),
-        max_languages=_parse_int(os.environ.get('LANG_STATS_MAX_LANGUAGES')),
+        min_percentage=parse_float(os.environ.get('LANG_STATS_MIN_PERCENTAGE')),
+        max_languages=parse_int(os.environ.get('LANG_STATS_MAX_LANGUAGES')),
         readme_path=os.environ.get('LANG_STATS_README_PATH', 'README.md'),
         start_marker=os.environ.get('LANG_STATS_START_MARKER', DEFAULT_START_MARKER),
         end_marker=os.environ.get('LANG_STATS_END_MARKER', DEFAULT_END_MARKER),
