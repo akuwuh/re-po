@@ -9,6 +9,8 @@ accepted, and implementations should remain as small as possible.
 
 ```
 repo/
+  core/
+    shared/
   features/
     <feature-name>/
       __init__.py
@@ -18,7 +20,8 @@ repo/
       generate_<feature-name>.py
 ```
 
-Only domain-specific logic lives here. Shared utilities belong in `repo/core/`.
+Only domain-specific logic lives here. Shared cross-feature helpers belong in
+`repo/core/shared/`.
 
 ## 2. Register the Feature
 
@@ -28,7 +31,7 @@ Inside `generate_<feature>.py`:
 2. Decorate it with `@register_feature("<feature-name>")`.
 3. Keep a CLI entry point (`main()`) so users can still run the card directly.
 
-Do **not** touch other features when adding a new one.
+Do **not** import other features when adding a new one.
 
 ## 3. Action Inputs
 
@@ -51,8 +54,9 @@ Update the root `action.yml`:
 
 ## 6. Project Standards
 
-- Do not copy/paste helpers. Add reusable utilities to `repo/core/`.
+- Do not copy/paste helpers. Add reusable utilities to `repo/core/shared/`.
+- Keep `domain/` and `infrastructure/` as feature-bounded contexts unless logic
+  is truly generic across cards.
 - Keep PRs focused on the smallest change that satisfies the requirements.
 - Ensure docs and workflows stay in sync with the implementation.
-
 
