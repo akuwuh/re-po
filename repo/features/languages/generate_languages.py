@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import os
 import sys
-from pathlib import Path
 from typing import List
 
+from repo.core.file_utils import write_file
 from repo.core.feature_registry import FeatureConfig, FeatureResult, register_feature
 from repo.core.readme_updater import update_section
 
@@ -88,7 +88,7 @@ def _run_job(request: LanguagesRequest) -> FeatureResult:
             return renderer.render(stats)
 
         def _write_text_file(path: str, content: str) -> None:
-            Path(path).write_text(content, encoding='utf-8')
+            write_file(path, content)
 
         def _update_readme_section(content: str, readme_path: str, start_marker: str, end_marker: str) -> None:
             update_section(
