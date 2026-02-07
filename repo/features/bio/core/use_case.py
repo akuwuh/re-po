@@ -7,6 +7,7 @@ from __future__ import annotations
 from typing import Callable, List
 
 from repo.core.feature_registry import FeatureResult
+from repo.core.shared.markup import mono_lines_to_html
 from repo.core.shared.snippets import build_picture_snippet
 
 from .request import BioRequest
@@ -16,13 +17,6 @@ RenderSvg = Callable[[BioRequest, str], str]
 WriteTextFile = Callable[[str, str], None]
 UpdateReadmeSection = Callable[[str, str, str, str], None]
 Logger = Callable[[str], None]
-
-
-def _lines_to_html(lines: List[str]) -> str:
-    html_lines = [line.replace(" ", "&nbsp;") for line in lines]
-    body = "<br>\n".join(html_lines)
-    return f"<div align=\"center\">\n<samp>\n{body}\n</samp>\n</div>"
-
 
 def execute_bio(
     request: BioRequest,
@@ -61,7 +55,7 @@ def execute_bio(
 
     logger("Text mode selected. Rendering bio snippet...")
     text_lines = render_text_lines(request)
-    html_block = _lines_to_html(text_lines)
+    html_block = mono_lines_to_html(text_lines)
     if request.update_readme:
         update_readme_section(
             html_block,
