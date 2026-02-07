@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from typing import Dict
 
+from repo.core.shared.svg import escape_xml
 from repo.features.languages.extrusion_styles import ExtrusionStyleFactory
 
 from ...core.request import BioRequest
@@ -22,18 +23,6 @@ THEME_COLORS: Dict[str, Dict[str, str]] = {
         "border": "#f0f6fc",
     },
 }
-
-
-def _escape_xml(value: str) -> str:
-    return (
-        value.replace("&", "&amp;")
-        .replace("<", "&lt;")
-        .replace(">", "&gt;")
-        .replace('"', "&quot;")
-        .replace("'", "&apos;")
-    )
-
-
 def render_svg(request: BioRequest, theme: str) -> str:
     colors = THEME_COLORS["dark"] if theme == "dark" else THEME_COLORS["light"]
     layout = build_layout(request)
@@ -72,14 +61,14 @@ def render_svg(request: BioRequest, theme: str) -> str:
             "  </g>",
             "",
             '  <g id="content">',
-            f'    <text x="{layout.title_x}" y="{layout.title_y}" class="bio-text">{_escape_xml(layout.title_text)}</text>',
+            f'    <text x="{layout.title_x}" y="{layout.title_y}" class="bio-text">{escape_xml(layout.title_text)}</text>',
         ]
     )
 
     for row_layout in layout.rows:
         row_text = row_layout.text
         parts.append(
-            f'    <text x="{layout.rows_x}" y="{row_layout.y}" class="bio-text">{_escape_xml(row_text)}</text>'
+            f'    <text x="{layout.rows_x}" y="{row_layout.y}" class="bio-text">{escape_xml(row_text)}</text>'
         )
 
     parts.extend(["  </g>", "</svg>"])
