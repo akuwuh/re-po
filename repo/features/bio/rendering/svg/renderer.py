@@ -72,7 +72,7 @@ def render_svg(request: BioRequest, theme: str) -> str:
             "  </g>",
             "",
             '  <g id="content">',
-            f'    <text x="{layout.title_x}" y="{layout.title_y}" class="bio-text">{_escape_xml(request.title)}</text>',
+            f'    <text x="{layout.title_x}" y="{layout.title_y}" class="bio-text">{_escape_xml(layout.title_text)}</text>',
         ]
     )
 

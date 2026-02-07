@@ -21,6 +21,7 @@ class RowLayout:
 
 @dataclass(frozen=True)
 class BioLayout:
+    title_text: str
     title_x: float
     title_y: float
     rows_x: float
@@ -53,19 +54,19 @@ def build_layout(request: BioRequest) -> BioLayout:
     label_width_chars = max(len(row.label) for row in request.rows)
     value_width_chars = max(len(f"{row.prefix}{row.value}") for row in request.rows)
 
+    text_lines = render_text_lines(request)
+    title_text = text_lines[0]
+    row_text_lines = text_lines[1:]
+    max_line_chars = max(len(line) for line in text_lines)
+
     title_x = box_x + padding_x
     title_y = box_y + padding_y + line_height
-    rows_x = title_x + (2 * char_width)
-
-    text_lines = render_text_lines(request)
-    row_text_lines = text_lines[1:]
+    rows_x = title_x
 
     row_layouts = []
-    max_row_chars = 0
     for index, row in enumerate(request.rows):
         is_last = index == len(request.rows) - 1
         row_text = row_text_lines[index]
-        max_row_chars = max(max_row_chars, len(row_text))
         row_layouts.append(
             RowLayout(
                 row=row,
@@ -75,9 +76,7 @@ def build_layout(request: BioRequest) -> BioLayout:
             )
         )
 
-    title_width = len(request.title) * char_width
-    row_width = max_row_chars * char_width
-    content_width = max(title_width, row_width) + (content_right_gutter_chars * char_width)
+    content_width = (max_line_chars + content_right_gutter_chars) * char_width
     box_width = content_width + (padding_x * 2)
     box_height = (padding_y * 2) + (line_height * (len(request.rows) + 1))
 
@@ -85,6 +84,7 @@ def build_layout(request: BioRequest) -> BioLayout:
     svg_height = box_height + shadow_offset + 40.0
 
     return BioLayout(
+        title_text=title_text,
         title_x=title_x,
         title_y=title_y,
         rows_x=rows_x,
