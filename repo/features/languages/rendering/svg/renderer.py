@@ -6,7 +6,7 @@ from typing import List
 from ...domain import StatsCollection
 from ...core.config import RenderConfig
 from repo.core.shared.extrusion import ExtrusionStyleFactory
-from ...utils import escape_xml
+from repo.core.shared.svg import escape_xml
 from .patterns import CheckeredPatternGenerator
 
 
