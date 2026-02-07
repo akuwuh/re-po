@@ -7,6 +7,7 @@ from __future__ import annotations
 from typing import Callable, List
 
 from repo.core.feature_registry import FeatureResult
+from repo.core.shared.snippets import build_picture_snippet
 
 from .request import BioRequest
 
@@ -41,13 +42,7 @@ def execute_bio(
         logger(f"✓ Saved {request.svg_light_file}")
         logger(f"✓ Saved {request.svg_dark_file}")
 
-        snippet = (
-            "<picture>\n"
-            f'  <source media="(prefers-color-scheme: dark)" srcset="{request.svg_dark_file}">\n'
-            f'  <source media="(prefers-color-scheme: light)" srcset="{request.svg_light_file}">\n'
-            f'  <img alt="Bio Card" src="{request.svg_light_file}">\n'
-            "</picture>"
-        )
+        snippet = build_picture_snippet(request.svg_light_file, request.svg_dark_file, "Bio Card")
         if request.update_readme:
             update_readme_section(
                 snippet,
